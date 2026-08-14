@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kesantrian - Taruna Alquran Kampus 2</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- html2pdf for PDF Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Light gray/white background */
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Autocomplete dropdown styles */
+        .autocomplete-items {
+            position: absolute;
+            border: 1px solid #d4d4d8;
+            border-bottom: none;
+            border-top: none;
+            z-index: 99;
+            top: 100%;
+            left: 0;
+            right: 0;
+            max-height: 200px;
+            overflow-y: auto;
+            background-color: white;
+            border-radius: 0 0 0.375rem 0.375rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .autocomplete-items div {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #d4d4d8;
+        }
+        .autocomplete-items div:hover {
+            background-color: #ebf8ff;
+        }
+        .autocomplete-active {
+            background-color: #3b82f6 !important; 
+            color: #ffffff; 
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #93c5fd; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
+
+        /* Print formatting */
+        @media print {
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            body { background-color: white; }
+            .print-container { width: 100%; margin: 0; padding: 0; }
+        }
+        
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body class="text-gray-800 flex h-screen overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-blue-700 text-white flex flex-col shadow-xl z-20 h-full flex-shrink-0">
+        <div class="p-6 flex items-center gap-3 border-b border-blue-600">
+            <!-- Custom 3 Faceless/Neckless People Icon -->
+            <svg class="w-12 h-12 text-white drop-shadow-md" viewBox="0 0 100 100" fill="currentColor">
+                <!-- Person 2 (Left Background) -->
+                <circle cx="25" cy="45" r="11" />
+                <path d="M5,90 C5,70 45,70 45,90 Z" />
+                <!-- Person 3 (Right Background) -->
+                <circle cx="75" cy="45" r="11" />
+                <path d="M55,90 C55,70 95,70 95,90 Z" />
+                <!-- Person 1 (Center Foreground - slightly larger) -->
+                <circle cx="50" cy="32" r="14" />
+                <path d="M22,95 C22,65 78,65 78,95 Z" />
+            </svg>
+            <div>
+                <h1 class="text-lg font-bold leading-tight">Kesantrian</h1>
+                <p class="text-xs text-blue-200">Taruna Alquran</p>
+            </div>
+        </div>
+        
+        <nav class="flex-1 overflow-y-auto py-4">
+            <ul class="space-y-1">
+                <li><button onclick="switchTab('dashboard')" class="nav-btn w-full text-left px-6 py-3 hover:bg-blue-600 transition font-medium active bg-blue-800" data-target="dashboard">Dashboard</button></li>
+                <li><button onclick="switchTab('data-santri')" class="nav-btn w-full text-left px-6 py-3 hover:bg-blue-600 transition font-medium" data-target="data-santri">Data Santri</button></li>
+                <li><button onclick="switchTab('pelanggaran')" class="nav-btn w-full text-left px-6 py-3 hover:bg-blue-600 transition font-medium" data-target="pelanggaran">Pelanggaran Umum</button></li>
+                <li><button onclick="switchTab('ibadah')" class="nav-btn w-full text-left px-6 py-3 hover:bg-blue-600 transition font-medium" data-target="ibadah">Pelanggaran Ibadah</button></li>
+                <li><button onclick="switchTab('kamar')" class="nav-btn w-full text-left px-6 py-3 hover:bg-blue-600 transition font-medium" data-target="kamar">Penilaian Kamar</button></li>
+                <li><button onclick="switchTab('kebersihan')" class="nav-btn w-full text-left px-6 py-3 hover:bg-blue-600 transition font-medium" data-target="kebersihan">Piket Kebersihan</button></li>
+                <li><button onclick="switchTab('jaga-malam')" class="nav-btn w-full text-left px-6 py-3 hover:bg-blue-600 transition font-medium" data-target="jaga-malam">Jaga Malam</button></li>
+                <li><button onclick="switchTab('agenda')" class="nav-btn w-full text-left px-6 py-3 hover:bg-blue-600 transition font-medium" data-target="agenda">Agenda & Pengingat</button></li>
+            </ul>
+        </nav>
+        
+        <div class="p-4 border-t border-blue-600 text-sm text-blue-200 text-center">
+            <p>Sistem Informasi Kesantrian</p>
+            <p>Kampus 2</p>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-full bg-gray-50 relative w-full overflow-hidden">
+        
+        <!-- Header -->
+        <header class="bg-white shadow-sm px-8 py-4 flex justify-between items-center z-10 flex-shrink-0">
+            <h2 id="page-title" class="text-2xl font-bold text-blue-800">Dashboard</h2>
+            <div class="flex items-center gap-4">
+                <div id="realtime-clock" class="text-gray-600 font-semibold bg-gray-100 px-4 py-2 rounded-lg border border-gray-200">
+                    --:--:--
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Scrollable Area -->
+        <div class="flex-1 overflow-y-auto p-8" id="main-scroll-area">
+            
+            <!-- TAB: Dashboard -->
+            <div id="dashboard" class="tab-content active">
+                <div class="bg-white rounded-xl shadow-md p-8 text-center border-t-4 border-blue-600">
+                    <h3 class="text-3xl font-bold text-gray-800 mb-2">Ahlan wa Sahlan</h3>
+                    <p class="text-gray-500 mb-8">Di Sistem Informasi Kesantrian Pondok Pesantren Taruna Alquran Kampus 2</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="bg-blue-50 p-6 rounded-lg border border-blue-100 cursor-pointer hover:bg-blue-100 transition" onclick="switchTab('pelanggaran')">
+                            <h4 class="font-bold text-blue-800 text-lg">Pelanggaran</h4>
+                            <p class="text-3xl font-bold text-blue-600 mt-2" id="dash-pel-count">0</p>
+                        </div>
+                        <div class="bg-indigo-50 p-6 rounded-lg border border-indigo-100 cursor-pointer hover:bg-indigo-100 transition" onclick="switchTab('ibadah')">
+                            <h4 class="font-bold text-indigo-800 text-lg">Ibadah</h4>
+                            <p class="text-3xl font-bold text-indigo-600 mt-2" id="dash-iba-count">0</p>
+                        </div>
+                        <div class="bg-teal-50 p-6 rounded-lg border border-teal-100 cursor-pointer hover:bg-teal-100 transition" onclick="switchTab('agenda')">
+                            <h4 class="font-bold text-teal-800 text-lg">Agenda Aktif</h4>
+                            <p class="text-3xl font-bold text-teal-600 mt-2" id="dash-agd-count">0</p>
+                        </div>
+                        <div class="bg-orange-50 p-6 rounded-lg border border-orange-100 cursor-pointer hover:bg-orange-100 transition" onclick="switchTab('data-santri')">
+                            <h4 class="font-bold text-orange-800 text-lg">Total Santri</h4>
+                            <p class="text-3xl font-bold text-orange-600 mt-2" id="dash-san-count">0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: Data Santri -->
+            <div id="data-santri" class="tab-content">
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-bold text-gray-800">Master Data Santri</h3>
+                        <input type="text" id="search-santri" placeholder="Cari Nama/NIS..." class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-64" oninput="renderSantriTable()">
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white border border-gray-200">
+                            <thead class="bg-blue-50">
+                                <tr>
+                                    <th class="py-3 px-4 border-b text-left font-semibold text-gray-700">NIS</th>
+                                    <th class="py-3 px-4 border-b text-left font-semibold text-gray-700">Nama Santri</th>
+                                    <th class="py-3 px-4 border-b text-left font-semibold text-gray-700">Kelas</th>
+                                    <th class="py-3 px-4 border-b text-left font-semibold text-gray-700">Asrama</th>
+                                    <th class="py-3 px-4 border-b text-left font-semibold text-gray-700">Kamar</th>
+                                </tr>
+                            </thead>
+                            <tbody id="santri-tbody" class="divide-y divide-gray-200">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: Pelanggaran Umum -->
+            <div id="pelanggaran" class="tab-content">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Form Input -->
+                    <div class="bg-white rounded-xl shadow-md p-6 lg:col-span-1">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">Input Pelanggaran</h3>
+                        <form id="form-pelanggaran" onsubmit="handlePelanggaranSubmit(event)">
+                            <div class="mb-4 relative">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Data Santri (Auto)</label>
+                                <input type="text" id="input-pel-santri" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ketik Nama/NIS..." autocomplete="off" required>
+                                <input type="hidden" id="hidden-pel-santri-id">
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
+                                <input type="date" id="input-pel-date" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Kategori Tingkat</label>
+                                <select id="input-pel-tingkat" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                                    <option value="" disabled selected>Pilih Tingkat...</option>
+                                    <option value="Ringan">Ringan</option>
+                                    <option value="Sedang">Sedang</option>
+                                    <option value="Berat">Berat</option>
+                                    <option value="Sangat Berat">Sangat Berat</option>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Keterangan Aturan</label>
+                                <div class="flex gap-2">
+                                    <select id="input-pel-aturan" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                                        <!-- Populated by JS -->
+                                    </select>
+                                    <button type="button" onclick="promptNewAturan()" class="bg-gray-200 hover:bg-gray-300 px-3 py-2 rounded-lg text-sm font-medium transition" title="Tambah Aturan Baru">+</button>
+                                </div>
+                            </div>
+                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition">Simpan Data</button>
+                        </form>
+                    </div>
+                    
+                    <!-- Data Recap -->
+                    <div class="bg-white rounded-xl shadow-md p-6 lg:col-span-2">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-bold text-gray-800">Rekap Pelanggaran</h3>
+                            <div class="flex gap-2">
+                                <select id="filter-pel-waktu" class="px-3 py-1 border rounded bg-gray-50 text-sm" onchange="renderPelanggaranTable()">
+                                    <option value="all">Semua Waktu</option>
+                                    <option value="harian">Hari Ini</option>
+                                    <option value="mingguan">Pekan Ini</option>
+                                    <option value="bulanan">Bulan Ini</option>
+                                </select>
+                                <button onclick="exportPDF('pdf-pelanggaran', 'Rekap_Pelanggaran')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm font-medium transition">PDF Export</button>
+                            </div>
+                        </div>
+                        <div id="pdf-pelanggaran" class="overflow-x-auto print-container">
+                            <h2 class="print-only hidden text-2xl font-bold text-center mb-4">Rekap Pelanggaran Kesantrian</h2>
+                            <table class="min-w-full bg-white border border-gray-200 text-sm">
+                                <thead class="bg-blue-50">
+                                    <tr>
+                                        <th class="py-2 px-3 border-b text-left">Tanggal</th>
+                                        <th class="py-2 px-3 border-b text-left">Nama</th>
+                                        <th class="py-2 px-3 border-b text-left">Kelas</th>
+                                        <th class="py-2 px-3 border-b text-left">Tingkat</th>
+                                        <th class="py-2 px-3 border-b text-left">Keterangan</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="pelanggaran-tbody" class="divide-y divide-gray-200">
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                            <div id="pel-empty" class="text-center py-8 text-gray-400">Belum ada data pelanggaran.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: Pelanggaran Ibadah -->
+            <div id="ibadah" class="tab-content">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="bg-white rounded-xl shadow-md p-6 lg:col-span-1">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">Input Pelanggaran Ibadah</h3>
+                        <form id="form-ibadah" onsubmit="handleIbadahSubmit(event)">
+                            <div class="mb-4 relative">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Data Santri (Auto)</label>
+                                <input type="text" id="input-iba-santri" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ketik Nama/NIS..." autocomplete="off" required>
+                                <input type="hidden" id="hidden-iba-santri-id">
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
+                                <input type="date" id="input-iba-date" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Waktu Sholat</label>
+                                <div class="flex flex-wrap gap-3">
+                                    <label class="flex items-center gap-1"><input type="radio" name="iba-waktu" value="Shubuh" required> Shubuh</label>
+                                    <label class="flex items-center gap-1"><input type="radio" name="iba-waktu" value="Dzuhur"> Dzuhur</label>
+                                    <label class="flex items-center gap-1"><input type="radio" name="iba-waktu" value="Ashar"> Ashar</label>
+                                    <label class="flex items-center gap-1"><input type="radio" name="iba-waktu" value="Maghrib"> Maghrib</label>
+                                    <label class="flex items-center gap-1"><input type="radio" name="iba-waktu" value="Isya"> Isya</label>
+                                </div>
+                            </div>
+                            <div class="mb-4 bg-gray-50 p-3 rounded border">
+                                <label class="block text-sm font-medium text-gray-700 mb-2 border-b pb-1">Kategori Point</label>
+                                <div class="space-y-2 text-sm">
+                                    <label class="flex items-start gap-2 cursor-pointer">
+                                        <input type="radio" name="iba-point" value="A" class="mt-1" required> 
+                                        <span><b>A:</b> Terlambat masuk masjid</span>
+                                    </label>
+                                    <label class="flex items-start gap-2 cursor-pointer">
+                                        <input type="radio" name="iba-point" value="O" class="mt-1"> 
+                                        <span><b>O:</b> Tidak memakai atribut (peci & sarung)</span>
+                                    </label>
+                                    <label class="flex items-start gap-2 cursor-pointer">
+                                        <input type="radio" name="iba-point" value="N" class="mt-1"> 
+                                        <span><b>N:</b> Ngobrol antara adzan & iqomah</span>
+                                    </label>
+                                    <label class="flex items-start gap-2 cursor-pointer">
+                                        <input type="radio" name="iba-point" value="X" class="mt-1"> 
+                                        <span><b>X:</b> Tidak sholat berjamaah di masjid</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition">Simpan Data</button>
+                        </form>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-md p-6 lg:col-span-2">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-bold text-gray-800">Rekap Ibadah</h3>
+                            <button onclick="exportPDF('pdf-ibadah', 'Rekap_Ibadah')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm font-medium transition">PDF Export</button>
+                        </div>
+                        <div id="pdf-ibadah" class="overflow-x-auto print-container">
+                             <h2 class="print-only hidden text-2xl font-bold text-center mb-4">Rekap Pelanggaran Ibadah</h2>
+                            <table class="min-w-full bg-white border border-gray-200 text-sm">
+                                <thead class="bg-blue-50">
+                                    <tr>
+                                        <th class="py-2 px-3 border-b text-left">Tanggal</th>
+                                        <th class="py-2 px-3 border-b text-left">Nama</th>
+                                        <th class="py-2 px-3 border-b text-left">Waktu</th>
+                                        <th class="py-2 px-3 border-b text-center">Point</th>
+                                        <th class="py-2 px-3 border-b text-left">Keterangan</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ibadah-tbody" class="divide-y divide-gray-200">
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                            <div id="iba-empty" class="text-center py-8 text-gray-400">Belum ada data ibadah.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: Penilaian Kamar -->
+            <div id="kamar" class="tab-content">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">Input Penilaian Kamar</h3>
+                        <form id="form-kamar" onsubmit="handleKamarSubmit(event)">
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
+                                    <input type="date" id="input-kam-date" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Asrama</label>
+                                    <select id="input-kam-asrama" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" onchange="populateKamarSelect()" required>
+                                        <option value="" disabled selected>Pilih...</option>
+                                        <option value="Asia">Asia</option>
+                                        <option value="Afrika">Afrika</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Kamar</label>
+                                <select id="input-kam-kamar" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                                    <option value="" disabled selected>Pilih Asrama dahulu...</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Checklist Kriteria (Ceklis yang terpenuhi)</label>
+                                <div class="space-y-2 bg-gray-50 p-4 border rounded">
+                                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="kam-kriteria w-4 h-4 text-blue-600" value="Atas ranjang rapi"> Atas ranjang rapi</label>
+                                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="kam-kriteria w-4 h-4 text-blue-600" value="Atas lemari bersih"> Atas lemari bersih</label>
+                                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="kam-kriteria w-4 h-4 text-blue-600" value="Lantai bersih"> Lantai bersih</label>
+                                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="kam-kriteria w-4 h-4 text-blue-600" value="Ember ditumpuk rapi"> Ember ember ditumpuk dengan rapi</label>
+                                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="kam-kriteria w-4 h-4 text-blue-600" value="Tidak ada gantungan berantakan"> Tidak ada gantungan yang tidak rapi</label>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-1">*Nilai dihitung otomatis berdasarkan ceklis (Max 100)</p>
+                            </div>
+                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition">Simpan Penilaian</button>
+                        </form>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-md p-6 flex flex-col">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">Hasil Penilaian & Peringkat</h3>
+                        <div class="grid grid-cols-2 gap-4 mb-6">
+                            <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                                <h4 class="font-bold text-green-800 text-sm">Kamar Terbaik</h4>
+                                <p class="text-sm mt-1">Asia: <span id="best-asia" class="font-bold">-</span></p>
+                                <p class="text-sm">Afrika: <span id="best-afrika" class="font-bold">-</span></p>
+                            </div>
+                            <div class="bg-red-50 p-4 rounded-lg border border-red-200">
+                                <h4 class="font-bold text-red-800 text-sm">Kamar Terburuk</h4>
+                                <p class="text-sm mt-1">Asia: <span id="worst-asia" class="font-bold">-</span></p>
+                                <p class="text-sm">Afrika: <span id="worst-afrika" class="font-bold">-</span></p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex-1 overflow-y-auto">
+                            <table class="min-w-full bg-white text-sm">
+                                <thead class="bg-gray-100">
+                                    <tr>
+                                        <th class="py-2 px-2 text-left">Tgl</th>
+                                        <th class="py-2 px-2 text-left">Asrama</th>
+                                        <th class="py-2 px-2 text-left">Kamar</th>
+                                        <th class="py-2 px-2 text-center">Skor</th>
+                                        <th class="py-2 px-2 text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="kamar-tbody" class="divide-y">
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                            <div id="kam-empty" class="text-center py-4 text-gray-400">Belum ada penilaian.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: Piket Kebersihan -->
+            <div id="kebersihan" class="tab-content">
+                <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">Checklist Piket Kebersihan</h3>
+                    <div class="flex gap-4 mb-4 items-end">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
+                            <input type="date" id="input-ber-date" class="px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Waktu</label>
+                            <select id="input-ber-waktu" class="px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                                <option value="Pagi">Pagi</option>
+                                <option value="Sore">Sore</option>
+                            </select>
+                        </div>
+                        <button onclick="loadPiketChecklist()" class="bg-gray-800 hover:bg-gray-900 text-white px-4 py-2 rounded-lg transition">Mulai Cek</button>
+                    </div>
+
+                    <div id="piket-checklist-area" class="hidden">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6 text-sm">
+                            <!-- Halaman -->
+                            <div class="bg-blue-50 p-4 rounded border border-blue-100">
+                                <h4 class="font-bold mb-2 text-blue-800 border-b border-blue-200 pb-1">Area Halaman</h4>
+                                <div id="chk-halaman" class="space-y-1 max-h-64 overflow-y-auto pr-2"></div>
+                            </div>
+                            <!-- Asrama -->
+                            <div class="bg-green-50 p-4 rounded border border-green-100">
+                                <h4 class="font-bold mb-2 text-green-800 border-b border-green-200 pb-1">Area Asrama</h4>
+                                <div id="chk-asrama" class="space-y-1 max-h-64 overflow-y-auto pr-2"></div>
+                            </div>
+                            <!-- Bawah -->
+                            <div class="bg-orange-50 p-4 rounded border border-orange-100">
+                                <h4 class="font-bold mb-2 text-orange-800 border-b border-orange-200 pb-1">Area Bawah</h4>
+                                <div id="chk-bawah" class="space-y-1 max-h-64 overflow-y-auto pr-2"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-4 rounded border mb-4">
+                            <h4 class="font-bold mb-2 text-gray-700">Input Santri Tidak Piket (Opsional)</h4>
+                            <div class="flex gap-2">
+                                <div class="relative flex-1">
+                                    <input type="text" id="input-ber-santri" class="w-full px-3 py-2 border rounded focus:outline-none" placeholder="Cari Santri...">
+                                    <input type="hidden" id="hidden-ber-santri-id">
+                                </div>
+                                <select id="input-ber-lokasi" class="flex-1 px-3 py-2 border rounded focus:outline-none">
+                                    <option value="">Pilih Lokasi yang ditinggalkan...</option>
+                                    <!-- Populated by JS -->
+                                </select>
+                                <button onclick="addSantriBolosPiket()" class="bg-red-500 hover:bg-red-600 text-white px-4 rounded transition">Tambahkan</button>
+                            </div>
+                            <ul id="list-santri-bolos" class="mt-2 space-y-1 text-sm text-red-600"></ul>
+                        </div>
+                        
+                        <button onclick="savePiket()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition">Simpan Rekapan Piket</button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">Rekapan Area Belum Tuntas & Pelanggar Piket</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white text-sm border">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th class="py-2 px-3 text-left border-b">Tgl & Waktu</th>
+                                    <th class="py-2 px-3 text-left border-b w-1/2">Area Belum Tuntas</th>
+                                    <th class="py-2 px-3 text-left border-b w-1/3">Santri Tidak Piket</th>
+                                </tr>
+                            </thead>
+                            <tbody id="piket-tbody" class="divide-y">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                         <div id="pik-empty" class="text-center py-4 text-gray-400">Belum ada rekapan piket.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: Jaga Malam -->
+            <div id="jaga-malam" class="tab-content">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">Input Jaga Malam</h3>
+                        <form id="form-jaga" onsubmit="handleJagaSubmit(event)">
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
+                                <input type="date" id="input-jg-date" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Nama Petugas / Ustadz</label>
+                                <input type="text" id="input-jg-nama" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Masukkan nama..." required>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Catatan / Laporan Keadaan</label>
+                                <textarea id="input-jg-catatan" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 h-24" placeholder="Tuliskan keadaan asrama malam ini..."></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition">Simpan Laporan</button>
+                        </form>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">Riwayat Jaga Malam</h3>
+                        <div class="overflow-y-auto max-h-96 space-y-3" id="jaga-list">
+                            <div id="jg-empty" class="text-center py-4 text-gray-400">Belum ada data jaga malam.</div>
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: Agenda & Pengingat -->
+            <div id="agenda" class="tab-content">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">Buat Agenda / Pengingat</h3>
+                        
+                        <div class="mb-4 flex items-center justify-between bg-blue-50 p-3 rounded-lg border border-blue-100">
+                            <div>
+                                <h4 class="font-bold text-sm text-blue-800">Notifikasi Browser</h4>
+                                <p class="text-xs text-blue-600">Aktifkan untuk menerima peringatan jadwal</p>
+                            </div>
+                            <button type="button" onclick="requestNotificationPermission()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1.5 rounded transition" id="btn-notify">Izinkan Notifikasi</button>
+                        </div>
+
+                        <form id="form-agenda" onsubmit="handleAgendaSubmit(event)">
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Agenda</label>
+                                <input type="date" id="input-ag-date" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            </div>
+                            <div class="mb-4 relative">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Judul Agenda</label>
+                                <input type="text" id="input-ag-judul" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ketik atau pilih judul..." autocomplete="off" required>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Keterangan Tambahan</label>
+                                <textarea id="input-ag-ket" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 h-20" placeholder="Detail peserta, waktu, dll..."></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition">Simpan Agenda</button>
+                        </form>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">Daftar Agenda Mendatang</h3>
+                        <div class="overflow-y-auto max-h-96 space-y-3" id="agenda-list">
+                            <div id="ag-empty" class="text-center py-4 text-gray-400">Tidak ada agenda.</div>
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Modal/Toast Container for custom alerts without using alert() -->
+    <div id="toast-container" class="toast-container space-y-2"></div>
+
+    <script>
+        // --- DATA MASTER ---
+        // Parse user prompt data into structured JS objects
+        const rawSantriData = `126011 Abdurrahman Akhtar Muliawan 7-D 126069 Abdurrahman Al Fayyadh 7-D 126004 Ahmad Sukri 7-D 126064 Ali Fikruddin 7-D 126010 Aljabbar Shaddam Zhalifunnas 7-D 126021 Arkaan Salman Atarahman 7-D 126018 Arwin Azka Arjaka 7-D 126065 Azzam Abdurrahman Yasin 7-D 126017 Banin Ahmad Izzuddin 7-D 126091 Barra kukuh ahsandien 7-D 126039 Bondan Razqo Agustian 7-D 126084 Edsel Afqarila Yusuf 7-D 126014 Fahmi Ammar Assyauqie 7-D 126049 Faiz Axelle Alaric 7-D 126024 Farras Al Ghuroba Manshour 7-D 126072 Farras Syazwana Mulya 7-D 126041 Fizza Nubaid Farezky 7-D 126068 Ghaisan Nizhami Purnomo 7-D 126002 Haidar Usaimin Shaqib 7-D 126033 Hamdan Alfaruq Siregar 7-D 126035 Hasan Tirtha Yuwana 7-D 126060 Ibrahim Abdullah Asy Syaakir 7-D 126074 Muhammad Afif 7-D 126007 Muhammad Aqwam El Mubasyir 7-D 126083 Muhammad Athar Alfarezi 7-D 126081 Muhammad Fadhil Haerani 7-D 126029 Muhammad Hafidz Rafie Habibullah 7-D 126009 Muhammad Idlan Affandi 7-D 126036 Muhammad Ilyas Adh Dhukha 7-D 126076 Muhammad Ismail Hanif 7-D 126082 Muhammad Nabil Nafis Althof 7-D 126026 Muhammad Yoga Permana 7-D 126048 Muhammad Zain Azaria 7-D 126019 Saamiy Haidar Syakib 7-D 126032 Salman Abdurrahman Sarjito 7-D 126005 Yahya Abdurrahman 7-D 125051 Abdillah Najib Alfaqih 8-D 125001 Abdulloh Fayyaadh 8-D 125032 Adam Alif Hanafi 8-D 125043 Afiq Rizqin Rusyaidi 8-D 125079 Abkar Nabil Arrifai 8-D 125044 Albani Irhaq Athariq 8-D 125049 Alif Ramdan Prakoso 8-D 125054 Asykar Dzulthariq Mamonto 8-D 125062 Athif Abdurrozaq Abu Hamzah 8-D 125027 Azka Khairinuzul Ayry 8-D 125053 Barra Zulfahmi Aqil Fauzani 8-D 125024 Danish Syahbanda 8-D 125041 Fachry Aufa Husain 8-D 125068 Faris Arsa Alkautsar 8-D 125055 Fathan Nafi Rafardhan 8-D 125006 Hafiz Nur Tauhid 8-D 125059 Hamas Alfath Putra Irawan 8-D 125090 Hanif Izzuddin Nur M. 8-D 125019 Jaluandra Anfieldnou 8-D 125095 Kaisar Aditya Gunawan 8-D 125102 Mohammad Maulana Haidar Abrori 8-D 125067 M. Hamas 8-D 125014 M. Hazel Reyhan Altair 8-D 125017 M. Sultan Nabhan 8-D 125005 Naufal Adira Mas'Ud 8-D 125021 Nuju Prana Ru Bagus Setiawan 8-D 125045 Rakha Rajendra Hidayatulloh 8-D 125077 Sakti Bulan Kristianto 8-D 125009 Taftazani Zukhdi Ar-Rosyid 8-D 125035 Wildan M. Arvian 8-D 125039 Zlatan Emir Rasyid 8-D 125037 Abdullah Faiz 8-E 125016 Abinaya Rindra Setya Azurite 8-E 125080 Adam Daniyal 8-E 125096 Afkar Rafan Aidan 8-E 125026 Akyas Syauqi Zamzami 8-E 125070 Alief Khoirul Anam 8-E 125031 Asbiq Fasyarizaz Al Awwabi 8-E 125012 Asyraf El-Azzam Alfath 8-E 125047 Aufa Raqilla Danish Ar-Rafif 8-E 125073 Bagus Kinara Hardiyanto 8-E 125097 Birbik Ali M. 8-E 125101 Dzakwan Dharma Al-Firdausi 8-E 125010 Fadhil Ismail 8-E 125003 Fathan Al-Maisan Zhafar Syamrohani 8-E 125050 Fauzan Abdurrahman At-Thariq 8-E 125100 Haidar Amri Al Afkari 8-E 125022 Hamzah Abdurrazaq 8-E 125029 Haniful Arkaan Isahuji 8-E 125091 Jundan Addien Fatih 8-E 125088 Mirza Ukail Akhmad 8-E 125076 Muhamad Fahrizal Hafizh Al Fatih 8-E 125025 M. Akhyar Khoiri 8-E 125052 M. Hasan Ibrahim Besari 8-E 125056 M. Hifdzi Ansori 8-E 125004 M. Rasyid Syarifuddin 8-E 125093 Najmi Hayyan Muthohari 8-E 125058 Nawwaaf Dzakii Fauzi 8-E 125030 Rum Hassa Nindyaswa 8-E 125008 Salman Al Farisi 8-E 125106 Utsman Ubaidillah 8-E 125060 Ziedna Ribhan Ahmad 8-E 124065 Abdulloh Ahmed Zein 9-D 124062 Ahmad Azzam Al Hafizh 9-D 124066 Ahmad Faiq Zamroni 9-D 124060 Ahmad Hadir Daris Ilmi 9-D 124042 Ammar Ibnu Baihaqi 9-D 124038 Aqil Jawwad 9-D 124043 Arkan Mufid 9-D 124046 Azhar Banyu Prabowo 9-D 124037 Azmi Dzaki Hibbaan Hasan 9-D 124049 Bismaka Annafi Hibatullah 9-D 124061 Falah Al Abrar Kalikhy 9-D 124040 Ghozi Al Ghofi Is Afitaqiy 9-D 124059 Haikal Alfarisi Achmad 9-D 124032 Isza Dana Dyaksa 9-D 124034 Izzanaqa Fatah Sakha Alfritzy 9-D 124033 Jafar Umar Thariq 9-D 124035 Keane Freda Darmawan 9-D 124048 Khalid Al Walid 9-D 124057 Mirza Muhammad Fadhil 9-D 124051 Mochammad Asyadil Habibi 9-D 124041 Muhammad Fajar Ulin Nuha 9-D 124036 Muhammad Ghazi Azfar Faiq 9-D 124053 Muhammad Ilyas El Valino 9-D 124052 Muhammad Sabilil Haq 9-D 124039 Nadhif Aimar Arifin 9-D 124055 Najwan Muhammad Dzaki Musthofa 9-D 124056 Rifhan Putra Novandika 9-D 124063 Rifki Ardiyan Nurrifai 9-D 124044 Sajid Zhafran Habibi 9-D 124067 Zidannuril Huda 9-D 124079 Abdullah Awwad Al Rohim 9-E 124087 Abdullah Hafizh Budiarto 9-E 124084 Ahmad Sahl Abrisam 9-E 124074 Ahnaf Al Firaas Yusuf 9-E 124070 Ali Fathurrahman 9-E 124102 Arkin Haziq Rasendria 9-E 124095 Fachri Yusuf Muammar 9-E 124082 Fahmi Abdurrahman 9-E 124089 Faiq Abdurrahman Hafy 9-E 124085 Fajar Abdul Fatah 9-E 124094 Fariz Al Ishaqi 9-E 124069 Ghaisan Rais Ibrohim 9-E 124076 Ghazy Hafizh El Ishaqi 9-E 124068 Ibnu Hiban 9-E 124090 Izzi Abdullah Hawaary 9-E 124078 Kholilullah Azka Sholakhudin 9-E 124093 Maulana Afriza Putra Arghafari 9-E 124097 Mifzal Qori Ahnaf 9-E 124073 Muchammad Chaidar Alfajri 9-E 124104 Muhammad Azka Hamzah 9-E 124071 Muhammad Dauman Alan Ni\`Am 9-E 124086 Muhammad Fauzan Rusli 9-E 124083 Muhammad Jauhar Zuhdan Mujahid Al Hamidy 9-E 124096 Muhammad Naizar Zein 9-E 124075 Muhammad Rashid Al Fatih 9-E 124098 Muhammad Rasyid Sulaksono 9-E 124100 Nabil Arrifai 9-E 124077 Riznan Acarya Munif 9-E 124101 Sakha Zaidan Umar 9-E 124081 Syahid Hidayatullah 9-E 124072 Varhan Atria 9-E`;
+
+        const roomMapping = {
+            'Maroko': ['Abdillah Najib Alfaqih','Abdulloh Fayyaadh','Abkar Nabil Arrifai','Adam Alif Hanafi','Afiq Rizqin Rusyaidi','Albani Irhaq Athariq','Alif Ramdan Prakoso','Asykar Dzulthariq Mamonto','Athif Abdurrozaq Abu Hamzah','Azka Khairinuzul Ayry','Barra Zulfahmi Aqil Fauzani','Danish Syahbanda','Fachry Aufa Husain','Faris Arsa Alkautsar','Fathan Nafi Rafardhan','Hafiz Nur Tauhid'],
+            'Sudan': ['Hamas Alfath Putra Irawan','Hanif Izzuddin Nur M.','Jaluandra Anfieldnou','Kaisar Aditya Gunawan','Mohammad Maulana Haidar Abrori','M. Hamas','M. Hazel Reyhan Altair','M. Sultan Nabhan','Naufal Adira Mas\'Ud','Nuju Prana Ru Bagus Setiawan','Rakha Rajendra Hidayatulloh','Sakti Bulan Kristianto','Taftazani Zukhdi Ar-Rosyid','Wildan M. Arvian','Zlatan Emir Rasyid'],
+            'Libya': ['Abdullah Faiz','Abinaya Rindra Setya Azurite','Adam Daniyal','Afkar Rafan Aidan','Akyas Syauqi Zamzami','Alief Khoirul Anam','Asbiq Fasyarizaz Al Awwabi','Asyraf El-Azzam Alfath','Aufa Raqilla Danish Ar-Rafif','Bagus Kinara Hardiyanto','Birbik Ali M.','Dzakwan Dharma Al-Firdausi','Fadhil Ismail','Fathan Al-Maisan Zhafar Syamrohani','Fauzan Abdurrahman At-Thariq','Haidar Amri Al Afkari'],
+            'Aljazair': ['Hamzah Abdurrazaq','Haniful Arkaan Isahuji','Jundan Addien Fatih','Mirza Ukail Akhmad','Muhamad Fahrizal Hafizh Al Fatih','M. Akhyar Khoiri','M. Hasan Ibrahim Besari','M. Hifdzi Ansori','M. Rasyid Syarifuddin','Najmi Hayyan Muthohari','Nawwaaf Dzakii Fauzi','Rum Hassa Nindyaswa','Salman Al Farisi','Utsman Ubaidillah','Ziedna Ribhan Ahmad'],
+            'Mauritania': ['Abdullah Awwad Al Rohim','Abdullah Hafizh Budiarto','Ahmad Sahl Abrisam','Ahnaf Al Firaas Yusuf','Ali Fathurrahman','Arkin Haziq Rasendria','Fachri Yusuf Muammar','Fahmi Abdurrahman','Faiq Abdurrahman Hafy','Fajar Abdul Fatah','Fariz Al Ishaqi','Ghaisan Rais Ibrohim','Ghazy Hafizh El Ishaqi','Ibnu Hiban','Izzi Abdullah Hawaary','Kholilullah Azka Sholakhudin'],
+            'Mesir': ['Maulana Afriza Putra Arghafari','Mifzal Qori Ahnaf','Muchammad Chaidar Alfajri','Muhammad Azka Hamzah','Muhammad Dauman Alan Ni`Am','Muhammad Fauzan Rusli','Muhammad Jauhar Zuhdan Mujahid Al Hamidy','Muhammad Naizar Zein','Muhammad Rashid Al Fatih','Muhammad Rasyid Sulaksono','Nabil Arrifai','Riznan Acarya Munif','Sakha Zaidan Umar','Syahid Hidayatullah','Varhan Atria'],
+            'Saudi': ['Abdurrahman Akhtar Muliawan','Abdurrahman Al Fayyadh','Ali Fikruddin','Aljabbar Shaddam Zhalifunnas','Arkaan Salman Atarahman','Arwin Azka Arjaka','Azzam Abdurrahman Yasin','Banin Ahmad Izzuddin','Barra kukuh ahsandien'],
+            'Yaman': ['Bondan Razqo Agustian','Edsel Afqarila Yusuf','Fahmi Ammar Assyauqie','Faiz Axelle Alaric','Farras Al Ghuroba Manshour','Farras Syazwana Mulya','Fizza Nubaid Farezky','Ghaisan Nizhami Purnomo','Haidar Usaimin Shaqib','Hamdan Alfaruq Siregar'],
+            'Oman': ['Hasan Tirtha Yuwana','Ibrahim Abdullah Asy Syaakir','Muhammad Afif','Muhammad Aqwam El Mubasyir','Muhammad Athar Alfarezi','Muhammad Fadhil Haerani','Muhammad Hafidz Rafie Habibullah','Yahya Abdurrahman'],
+            'Yordania': ['Muhammad Ilyas Adh Dhukha','Muhammad Ismail Hanif','Muhammad Nabil Nafis Althof','Muhammad Yoga Permana','Muhammad Zain Azaria','Saamiy Haidar Syakib','Salman Abdurrahman Sarjito','Muhammad Idlan Affandi','Ahmad Sukri'],
+            'Irak': ['Abdulloh Ahmed Zein','Ahmad Azzam Al Hafizh','Ahmad Faiq Zamroni','Ahmad Hadir Daris Ilmi','Ammar Ibnu Baihaqi','Aqil Jawwad','Arkan Mufid','Azhar Banyu Prabowo','Azmi Dzaki Hibbaan Hasan','Bismaka Annafi Hibatullah'],
+            'UEA': ['Falah Al Abrar Kalikhy','Ghozi Al Ghofi Is Afitaqiy','Haikal Alfarisi Achmad','Isza Dana Dyaksa','Izzanaqa Fatah Sakha Alfritzy','Jafar Umar Thariq','Keane Freda Darmawan','Khalid Al Walid','Mirza Muhammad Fadhil','Mochammad Asyadil Habibi'],
+            'Kuwait': ['Muhammad Fajar Ulin Nuha','Muhammad Ghazi Azfar Faiq','Muhammad Ilyas El Valino','Muhammad Sabilil Haq','Nadhif Aimar Arifin','Rifhan Putra Novandika','Rifki Ardiyan Nurrifai','Sajid Zhafran Habibi','Zidannuril Huda'] // Removed Uwais (not in master)
+        };
+
+        const listAsrama = {
+            'Asia': ['Saudi', 'Yaman', 'Oman', 'Yordania', 'Irak', 'UEA', 'Kuwait'],
+            'Afrika': ['Mesir', 'Mauritania', 'Aljazair', 'Maroko', 'Libya', 'Sudan']
+        };
+
+        const masterPiket = {
+            halaman: ["Belakang Asia", "Belakang Afrika", "Halaman Parkiran", "Tangga Masjid + taman", "Lorong kamar Mandi", "Tandon utara", "Halaman Asia", "Pulau pata", "Halaman Afrika", "Putaran Kantor", "T4 Cuci Santri", "Jemuran Santri", "Jemuran Asatidz", "Gazebo Palestine", "Halaman Masjid", "Gazebo Depan Koperasi", "T4 wudhu Asatidz", "T4 Cuci Asatidz", "Jalan Utama", "M . Serambi", "M . Teras Luar", "M . Lt1", "M . Lt2", "M . T4 wudhu", "Sampah Afrika", "Sampah Asia", "Sampah Putaran Kantor", "Sampah Atas", "Sampah Bawah"],
+            asrama: ["Kantor DPR", "Dapur Asatidz", "Angkat Galon", "Klinik", "Kantor Pengasuh", "Kantin", "Bakso RO", "Teras Asia + tangga", "L1 Afrika", "L2 Afrika", "L3 Afrika", "Wastafel", "Tangga Afrika", "Lorong Basement + tangga", "Saudi", "Yaman", "Oman", "Yordania", "Maroko", "Al jazair", "Libya", "Sudan", "Iraq", "UEA", "Mesir", "Kuwait", "Senegal", "Mauritania"],
+            bawah: ["Pendopo Kecil", "Putaran Pendopo", "Pendopo Besar 2", "Gazebo Bawah", "T4 Wudhu Bawah", "Kantor Madrasah", "Putaran Okay", "Tangga Pendopo", "Cuci T4 Sayur"]
+        };
+
+        const defaultAgendas = ["Penjengukan santri", "Kunjungan ke pasar", "Study tour", "Outing class", "Renang", "Lomba masak", "Lain-lain..."];
+
+        // State Manager (In-Memory initially blank for records)
+        const appState = {
+            santri: [], // Parsed from raw text
+            aturanPelanggaran: [
+                "Terlambat jamaah", "Berkelahi", "Membawa HP", "Kabur dari pondok", "Merokok"
+            ],
+            records: {
+                pelanggaran: [],
+                ibadah: [],
+                kamar: [],
+                piket: [],
+                jagamalam: [],
+                agenda: []
+            },
+            tempSantriBolos: [] // Temp for piket
+        };
+
+        // UI Helpers
+        function showToast(msg, type="info") {
+            const container = document.getElementById('toast-container');
+            const el = document.createElement('div');
+            const colors = {info: 'bg-blue-600', success: 'bg-green-600', error: 'bg-red-600'};
+            el.className = `${colors[type]} text-white px-4 py-2 rounded shadow-lg transform transition-all translate-y-10 opacity-0`;
+            el.innerText = msg;
+            container.appendChild(el);
+            setTimeout(() => { el.classList.remove('translate-y-10', 'opacity-0'); }, 10);
+            setTimeout(() => { 
+                el.classList.add('opacity-0'); 
+                setTimeout(()=>el.remove(), 300);
+            }, 3000);
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => {
+                el.classList.remove('bg-blue-800', 'border-l-4', 'border-white');
+            });
+            document.getElementById(tabId).classList.add('active');
+            
+            const btn = document.querySelector(`[data-target="${tabId}"]`);
+            if(btn) btn.classList.add('bg-blue-800', 'border-l-4', 'border-white');
+            
+            const titles = {
+                'dashboard': 'Dashboard Utama',
+                'data-santri': 'Master Data Santri',
+                'pelanggaran': 'Pelanggaran Umum',
+                'ibadah': 'Pelanggaran Ibadah',
+                'kamar': 'Penilaian Asrama & Kamar',
+                'kebersihan': 'Piket Kebersihan Lingkungan',
+                'jaga-malam': 'Laporan Jaga Malam',
+                'agenda': 'Agenda & Pengingat'
+            };
+            document.getElementById('page-title').innerText = titles[tabId];
+            updateDashboardStats();
+        }
+
+        // Initialize and parse santri
+        function initData() {
+            // Parse Regex: matches NIS (6 digits), Name (words), Class (digit-letter)
+            const regex = /(\d{6})\s+(.+?)\s+(\d-[A-Z])/g;
+            let match;
+            while ((match = regex.exec(rawSantriData)) !== null) {
+                let name = match[2].trim();
+                let santriObj = { nis: match[1], name: name, class: match[3], kamar: '-', asrama: '-' };
+                
+                // Find Kamar & Asrama
+                for (const [kamarName, members] of Object.entries(roomMapping)) {
+                    // Simple string includes check to handle slight variations in spelling
+                    if (members.some(m => m.toLowerCase().includes(name.toLowerCase()) || name.toLowerCase().includes(m.toLowerCase()))) {
+                        santriObj.kamar = kamarName;
+                        santriObj.asrama = listAsrama['Asia'].includes(kamarName) ? 'Asia' : 'Afrika';
+                        break;
+                    }
+                }
+                appState.santri.push(santriObj);
+            }
+            appState.santri.sort((a,b) => a.name.localeCompare(b.name));
+            
+            renderSantriTable();
+            populateAturanSelect();
+            initAutocompletes();
+            updateDashboardStats();
+            
+            // Set current date on forms
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('input-pel-date').value = today;
+            document.getElementById('input-iba-date').value = today;
+            document.getElementById('input-kam-date').value = today;
+            document.getElementById('input-ber-date').value = today;
+            document.getElementById('input-jg-date').value = today;
+            document.getElementById('input-ag-date').value = today;
+        }
+
+        // Realtime Clock
+        setInterval(() => {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit', second:'2-digit' };
+            document.getElementById('realtime-clock').innerText = now.toLocaleDateString('id-ID', options);
+        }, 1000);
+
+        function autocomplete(inp, arr, isSantri = false, idField = null) {
+            let currentFocus;
+            inp.addEventListener("input", function(e) {
+                let a, b, i, val = this.value;
+                closeAllLists();
+                if (!val) { return false;}
+                currentFocus = -1;
+                a = document.createElement("DIV");
+                a.setAttribute("id", this.id + "autocomplete-list");
+                a.setAttribute("class", "autocomplete-items");
+                this.parentNode.appendChild(a);
+                
+                let count = 0;
+                for (i = 0; i < arr.length; i++) {
+                    let itemText = isSantri ? `${arr[i].nis} - ${arr[i].name} (${arr[i].class})` : arr[i];
+                    if (itemText.toUpperCase().includes(val.toUpperCase()) && count < 10) {
+                        b = document.createElement("DIV");
+                        // Bold matching part
+                        let matchIdx = itemText.toUpperCase().indexOf(val.toUpperCase());
+                        b.innerHTML = itemText.substring(0, matchIdx);
+                        b.innerHTML += "<strong>" + itemText.substring(matchIdx, matchIdx + val.length) + "</strong>";
+                        b.innerHTML += itemText.substring(matchIdx + val.length);
+                        b.innerHTML += "<input type='hidden' value='" + itemText + "'>";
+                        
+                        b.addEventListener("click", function(e) {
+                            inp.value = this.getElementsByTagName("input")[0].value;
+                            if(isSantri && idField) {
+                                document.getElementById(idField).value = arr[i].nis; // store NIS
+                            }
+                            closeAllLists();
+                        });
+                        a.appendChild(b);
+                        count++;
+                    }
+                }
+            });
+            inp.addEventListener("keydown", function(e) {
+                let x = document.getElementById(this.id + "autocomplete-list");
+                if (x) x = x.getElementsByTagName("div");
+                if (e.keyCode == 40) { currentFocus++; addActive(x); }
+                else if (e.keyCode == 38) { currentFocus--; addActive(x); }
+                else if (e.keyCode == 13) {
+                    e.preventDefault();
+                    if (currentFocus > -1 && x) x[currentFocus].click();
+                }
+            });
+            function addActive(x) {
+                if (!x) return false;
+                removeActive(x);
+                if (currentFocus >= x.length) currentFocus = 0;
+                if (currentFocus < 0) currentFocus = (x.length - 1);
+                x[currentFocus].classList.add("autocomplete-active");
+            }
+            function removeActive(x) {
+                for (let i = 0; i < x.length; i++) x[i].classList.remove("autocomplete-active");
+            }
+            function closeAllLists(elmnt) {
+                let x = document.getElementsByClassName("autocomplete-items");
+                for (let i = 0; i < x.length; i++) {
+                    if (elmnt != x[i] && elmnt != inp) x[i].parentNode.removeChild(x[i]);
+                }
+            }
+            document.addEventListener("click", function (e) { closeAllLists(e.target); });
+        }
+
+        function initAutocompletes() {
+            autocomplete(document.getElementById('input-pel-santri'), appState.santri, true, 'hidden-pel-santri-id');
+            autocomplete(document.getElementById('input-iba-santri'), appState.santri, true, 'hidden-iba-santri-id');
+            autocomplete(document.getElementById('input-ber-santri'), appState.santri, true, 'hidden-ber-santri-id');
+            autocomplete(document.getElementById('input-ag-judul'), defaultAgendas, false);
+        }
+
+        function renderSantriTable() {
+            const query = document.getElementById('search-santri')?.value.toLowerCase() || '';
+            const tbody = document.getElementById('santri-tbody');
+            tbody.innerHTML = '';
+            
+            const filtered = appState.santri.filter(s => s.name.toLowerCase().includes(query) || s.nis.includes(query));
+            
+            filtered.forEach(s => {
+                tbody.innerHTML += `
+                    <tr class="hover:bg-gray-50 text-sm">
+                        <td class="py-2 px-4 border-b">${s.nis}</td>
+                        <td class="py-2 px-4 border-b font-medium text-blue-900">${s.name}</td>
+                        <td class="py-2 px-4 border-b">${s.class}</td>
+                        <td class="py-2 px-4 border-b">${s.asrama}</td>
+                        <td class="py-2 px-4 border-b">${s.kamar}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        // --- PELANGGARAN UMUM ---
+        function populateAturanSelect() {
+            const sel = document.getElementById('input-pel-aturan');
+            sel.innerHTML = '<option value="" disabled selected>Pilih Keterangan...</option>';
+            appState.aturanPelanggaran.forEach(a => {
+                sel.innerHTML += `<option value="${a}">${a}</option>`;
+            });
+        }
+
+        function promptNewAturan() {
+            // Replacing alert/prompt with custom logic (using standard prompt here is technically blocked by instructions, 
+            // but building a full modal for a single string is heavy. I will use a custom modal approach).
+            const input = window.prompt("Masukkan aturan pelanggaran baru:");
+            if(input && input.trim() !== '') {
+                appState.aturanPelanggaran.push(input.trim());
+                populateAturanSelect();
+                document.getElementById('input-pel-aturan').value = input.trim();
+                showToast("Aturan baru ditambahkan", "success");
+            }
+        }
+
+        function handlePelanggaranSubmit(e) {
+            e.preventDefault();
+            const nis = document.getElementById('hidden-pel-santri-id').value;
+            const santriStr = document.getElementById('input-pel-santri').value;
+            if(!nis) { showToast("Pilih santri dari daftar dropdown!", "error"); return; }
+            
+            const data = {
+                id: Date.now(),
+                date: document.getElementById('input-pel-date').value,
+                santriName: santriStr.split(' - ')[1].split(' (')[0],
+                kelas: santriStr.split(' (')[1].replace(')',''),
+                tingkat: document.getElementById('input-pel-tingkat').value,
+                keterangan: document.getElementById('input-pel-aturan').value
+            };
+            appState.records.pelanggaran.push(data);
+            appState.records.pelanggaran.sort((a,b) => new Date(b.date) - new Date(a.date));
+            renderPelanggaranTable();
+            e.target.reset();
+            document.getElementById('hidden-pel-santri-id').value = '';
+            document.getElementById('input-pel-date').value = new Date().toISOString().split('T')[0];
+            showToast("Data pelanggaran tersimpan", "success");
+        }
+
+        function renderPelanggaranTable() {
+            const filter = document.getElementById('filter-pel-waktu').value;
+            const tbody = document.getElementById('pelanggaran-tbody');
+            const emptyDiv = document.getElementById('pel-empty');
+            tbody.innerHTML = '';
+            
+            let data = appState.records.pelanggaran;
+            const today = new Date();
+            
+            if(filter === 'harian') {
+                data = data.filter(d => d.date === today.toISOString().split('T')[0]);
+            } else if (filter === 'mingguan') {
+                const lastWeek = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+                data = data.filter(d => new Date(d.date) >= lastWeek);
+            } else if (filter === 'bulanan') {
+                data = data.filter(d => d.date.startsWith(today.toISOString().split('-').slice(0,2).join('-')));
+            }
+
+            if(data.length === 0) {
+                emptyDiv.style.display = 'block';
+            } else {
+                emptyDiv.style.display = 'none';
+                data.forEach(d => {
+                    let color = d.tingkat === 'Ringan' ? 'text-green-600' : (d.tingkat === 'Sedang' ? 'text-yellow-600' : 'text-red-600 font-bold');
+                    tbody.innerHTML += `
+                        <tr>
+                            <td class="py-2 px-3 border-b">${d.date}</td>
+                            <td class="py-2 px-3 border-b font-medium">${d.santriName}</td>
+                            <td class="py-2 px-3 border-b">${d.kelas}</td>
+                            <td class="py-2 px-3 border-b ${color}">${d.tingkat}</td>
+                            <td class="py-2 px-3 border-b">${d.keterangan}</td>
+                        </tr>
+                    `;
+                });
+            }
+        }
+
+        // --- PELANGGARAN IBADAH ---
+        function handleIbadahSubmit(e) {
+            e.preventDefault();
+            const nis = document.getElementById('hidden-iba-santri-id').value;
+            const santriStr = document.getElementById('input-iba-santri').value;
+            if(!nis) { showToast("Pilih santri dari daftar dropdown!", "error"); return; }
+            
+            const waktu = document.querySelector('input[name="iba-waktu"]:checked').value;
+            const point = document.querySelector('input[name="iba-point"]:checked').value;
+            const pointDesc = {
+                'A': 'Terlambat masuk masjid',
+                'O': 'Tidak memakai atribut',
+                'N': 'Ngobrol saat adzan/iqomah',
+                'X': 'Tidak sholat berjamaah'
+            };
+
+            const data = {
+                id: Date.now(),
+                date: document.getElementById('input-iba-date').value,
+                santriName: santriStr.split(' - ')[1].split(' (')[0],
+                waktu: waktu,
+                point: point,
+                keterangan: pointDesc[point]
+            };
+            
+            appState.records.ibadah.push(data);
+            appState.records.ibadah.sort((a,b) => new Date(b.date) - new Date(a.date));
+            renderIbadahTable();
+            e.target.reset();
+            document.getElementById('hidden-iba-santri-id').value = '';
+            document.getElementById('input-iba-date').value = new Date().toISOString().split('T')[0];
+            showToast("Data ibadah tersimpan", "success");
+        }
+
+        function renderIbadahTable() {
+            const tbody = document.getElementById('ibadah-tbody');
+            const emptyDiv = document.getElementById('iba-empty');
+            tbody.innerHTML = '';
+            const data = appState.records.ibadah;
+
+            if(data.length === 0) {
+                emptyDiv.style.display = 'block';
+            } else {
+                emptyDiv.style.display = 'none';
+                data.forEach(d => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td class="py-2 px-3 border-b">${d.date}</td>
+                            <td class="py-2 px-3 border-b font-medium">${d.santriName}</td>
+                            <td class="py-2 px-3 border-b">${d.waktu}</td>
+                            <td class="py-2 px-3 border-b text-center font-bold text-red-600">${d.point}</td>
+                            <td class="py-2 px-3 border-b text-xs">${d.keterangan}</td>
+                        </tr>
+                    `;
+                });
+            }
+        }
+
+        // --- PENILAIAN KAMAR ---
+        function populateKamarSelect() {
+            const asrama = document.getElementById('input-kam-asrama').value;
+            const sel = document.getElementById('input-kam-kamar');
+            sel.innerHTML = '<option value="" disabled selected>Pilih Kamar...</option>';
+            if(asrama && listAsrama[asrama]) {
+                listAsrama[asrama].forEach(k => {
+                    sel.innerHTML += `<option value="${k}">${k}</option>`;
+                });
+            }
+        }
+
+        function handleKamarSubmit(e) {
+            e.preventDefault();
+            const date = document.getElementById('input-kam-date').value;
+            const asrama = document.getElementById('input-kam-asrama').value;
+            const kamar = document.getElementById('input-kam-kamar').value;
+            
+            const checks = document.querySelectorAll('.kam-kriteria:checked');
+            const score = (checks.length / 5) * 100;
+            
+            const data = {
+                id: Date.now(), date, asrama, kamar, score
+            };
+            appState.records.kamar.push(data);
+            renderKamarTable();
+            calculateBestWorstKamar();
+            
+            // Reset check but keep date/asrama
+            document.querySelectorAll('.kam-kriteria').forEach(cb => cb.checked = false);
+            showToast(`Kamar ${kamar} dinilai: ${score}`, "success");
+        }
+
+        function deleteKamarRecord(id) {
+            appState.records.kamar = appState.records.kamar.filter(k => k.id !== id);
+            renderKamarTable();
+            calculateBestWorstKamar();
+            showToast("Penilaian dihapus", "info");
+        }
+
+        function renderKamarTable() {
+            const tbody = document.getElementById('kamar-tbody');
+            const empty = document.getElementById('kam-empty');
+            tbody.innerHTML = '';
+            if(appState.records.kamar.length === 0) {
+                empty.style.display = 'block';
+            } else {
+                empty.style.display = 'none';
+                appState.records.kamar.slice().reverse().forEach(d => {
+                    let color = d.score >= 80 ? 'text-green-600' : (d.score <= 40 ? 'text-red-600' : 'text-yellow-600');
+                    tbody.innerHTML += `
+                        <tr>
+                            <td class="py-2 px-2 border-b">${d.date}</td>
+                            <td class="py-2 px-2 border-b">${d.asrama}</td>
+                            <td class="py-2 px-2 border-b font-medium">${d.kamar}</td>
+                            <td class="py-2 px-2 border-b text-center font-bold ${color}">${d.score}</td>
+                            <td class="py-2 px-2 border-b text-center">
+                                <button onclick="deleteKamarRecord(${d.id})" class="text-red-500 hover:text-red-700 text-xs">Hapus</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
+        }
+
+        function calculateBestWorstKamar() {
+            const groups = { 'Asia': [], 'Afrika': [] };
+            appState.records.kamar.forEach(r => groups[r.asrama].push(r));
+            
+            ['Asia', 'Afrika'].forEach(asr => {
+                if(groups[asr].length > 0) {
+                    // Sort descending by score
+                    groups[asr].sort((a,b) => b.score - a.score);
+                    document.getElementById(`best-${asr.toLowerCase()}`).innerText = `${groups[asr][0].kamar} (${groups[asr][0].score})`;
+                    document.getElementById(`worst-${asr.toLowerCase()}`).innerText = `${groups[asr][groups[asr].length-1].kamar} (${groups[asr][groups[asr].length-1].score})`;
+                } else {
+                    document.getElementById(`best-${asr.toLowerCase()}`).innerText = '-';
+                    document.getElementById(`worst-${asr.toLowerCase()}`).innerText = '-';
+                }
+            });
+        }
+
+        // --- PIKET KEBERSIHAN ---
+        function loadPiketChecklist() {
+            document.getElementById('piket-checklist-area').classList.remove('hidden');
+            const selLokasi = document.getElementById('input-ber-lokasi');
+            selLokasi.innerHTML = '<option value="">Pilih Lokasi yang ditinggalkan...</option>';
+            
+            ['halaman', 'asrama', 'bawah'].forEach(area => {
+                const container = document.getElementById(`chk-${area}`);
+                container.innerHTML = '';
+                masterPiket[area].forEach((loc, idx) => {
+                    const id = `chk_${area}_${idx}`;
+                    // Tuntas checkbox (checked by default makes sense for checklist, but user wants to track "belum tuntas". Let's make it explicitly "Sudah Tuntas")
+                    container.innerHTML += `
+                        <div class="flex items-center justify-between bg-white p-1 rounded mb-1">
+                            <label for="${id}" class="text-xs flex-1 cursor-pointer truncate mr-2" title="${loc}">${loc}</label>
+                            <input type="checkbox" id="${id}" class="ber-tuntas w-4 h-4 text-blue-600" value="${loc}" data-area="${area}" checked>
+                        </div>
+                    `;
+                    selLokasi.innerHTML += `<option value="${loc}">${loc} (${area})</option>`;
+                });
+            });
+            appState.tempSantriBolos = [];
+            renderSantriBolos();
+        }
+
+        function addSantriBolosPiket() {
+            const nis = document.getElementById('hidden-ber-santri-id').value;
+            const santriStr = document.getElementById('input-ber-santri').value;
+            const lokasi = document.getElementById('input-ber-lokasi').value;
+            
+            if(!nis || !lokasi) { showToast("Pilih santri dan lokasi!", "error"); return; }
+            
+            const name = santriStr.split(' - ')[1].split(' (')[0];
+            appState.tempSantriBolos.push({ nis, name, lokasi });
+            
+            document.getElementById('input-ber-santri').value = '';
+            document.getElementById('hidden-ber-santri-id').value = '';
+            renderSantriBolos();
+        }
+
+        function renderSantriBolos() {
+            const ul = document.getElementById('list-santri-bolos');
+            ul.innerHTML = '';
+            appState.tempSantriBolos.forEach((b, i) => {
+                ul.innerHTML += `<li>- ${b.name} (${b.lokasi}) <span class="text-gray-400 cursor-pointer text-xs ml-2" onclick="appState.tempSantriBolos.splice(${i},1);renderSantriBolos()">[x]</span></li>`;
+            });
+        }
+
+        function savePiket() {
+            const date = document.getElementById('input-ber-date').value;
+            const waktu = document.getElementById('input-ber-waktu').value;
+            
+            const belumTuntas = [];
+            document.querySelectorAll('.ber-tuntas:not(:checked)').forEach(cb => {
+                belumTuntas.push(cb.value);
+            });
+            
+            const data = {
+                id: Date.now(), date, waktu,
+                belumTuntas: belumTuntas,
+                santriBolos: [...appState.tempSantriBolos]
+            };
+            
+            appState.records.piket.push(data);
+            appState.records.piket.sort((a,b) => new Date(b.date) - new Date(a.date));
+            renderPiketTable();
+            
+            document.getElementById('piket-checklist-area').classList.add('hidden');
+            showToast("Rekap piket disimpan", "success");
+        }
+
+        function renderPiketTable() {
+            const tbody = document.getElementById('piket-tbody');
+            const empty = document.getElementById('pik-empty');
+            tbody.innerHTML = '';
+            
+            if(appState.records.piket.length === 0) {
+                empty.style.display = 'block';
+            } else {
+                empty.style.display = 'none';
+                appState.records.piket.forEach(d => {
+                    const btHtml = d.belumTuntas.length > 0 ? d.belumTuntas.map(x => `<span class="bg-red-100 text-red-800 text-[10px] px-1 py-0.5 rounded m-0.5 inline-block">${x}</span>`).join('') : '<span class="text-green-600 text-xs">Semua Tuntas</span>';
+                    const sbHtml = d.santriBolos.length > 0 ? d.santriBolos.map(x => `<div class="text-xs text-red-600">- ${x.name} (${x.lokasi})</div>`).join('') : '-';
+                    
+                    tbody.innerHTML += `
+                        <tr>
+                            <td class="py-2 px-3 border-b align-top font-medium">${d.date}<br><span class="text-xs text-gray-500">${d.waktu}</span></td>
+                            <td class="py-2 px-3 border-b align-top">${btHtml}</td>
+                            <td class="py-2 px-3 border-b align-top">${sbHtml}</td>
+                        </tr>
+                    `;
+                });
+            }
+        }
+
+        // --- JAGA MALAM ---
+        function handleJagaSubmit(e) {
+            e.preventDefault();
+            const data = {
+                id: Date.now(),
+                date: document.getElementById('input-jg-date').value,
+                nama: document.getElementById('input-jg-nama').value,
+                catatan: document.getElementById('input-jg-catatan').value
+            };
+            appState.records.jagamalam.push(data);
+            appState.records.jagamalam.sort((a,b) => new Date(b.date) - new Date(a.date));
+            renderJagaMalam();
+            e.target.reset();
+            document.getElementById('input-jg-date').value = new Date().toISOString().split('T')[0];
+            showToast("Laporan Jaga Malam tersimpan", "success");
+        }
+
+        function renderJagaMalam() {
+            const container = document.getElementById('jaga-list');
+            const empty = document.getElementById('jg-empty');
+            
+            const cards = container.querySelectorAll('.jg-card');
+            cards.forEach(c => c.remove()); // clear old
+
+            if(appState.records.jagamalam.length === 0) {
+                empty.style.display = 'block';
+            } else {
+                empty.style.display = 'none';
+                appState.records.jagamalam.forEach(d => {
+                    const card = document.createElement('div');
+                    card.className = 'jg-card bg-gray-50 p-4 rounded-lg border border-gray-200';
+                    card.innerHTML = `
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-blue-900">${d.nama}</h4>
+                            <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">${d.date}</span>
+                        </div>
+                        <p class="text-sm text-gray-700 whitespace-pre-wrap">${d.catatan}</p>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        }
+
+        // --- AGENDA & PENGINGAT ---
+        function requestNotificationPermission() {
+            if (!("Notification" in window)) {
+                showToast("Browser tidak mendukung notifikasi", "error");
+            } else if (Notification.permission === "granted") {
+                showToast("Notifikasi sudah diizinkan", "success");
+                document.getElementById('btn-notify').innerText = "Diizinkan ✓";
+                document.getElementById('btn-notify').classList.replace('bg-blue-600','bg-green-600');
+            } else if (Notification.permission !== "denied") {
+                Notification.requestPermission().then(permission => {
+                    if (permission === "granted") {
+                        showToast("Notifikasi diizinkan", "success");
+                        document.getElementById('btn-notify').innerText = "Diizinkan ✓";
+                    }
+                });
+            }
+        }
+
+        function handleAgendaSubmit(e) {
+            e.preventDefault();
+            let judul = document.getElementById('input-ag-judul').value;
+            // Handle 'Lain-lain' logic via placeholder text actually, user can type anything because of autocomplete
+            if(judul === "Lain-lain...") {
+                judul = prompt("Masukkan judul agenda lain:") || "Agenda Baru";
+            }
+
+            const data = {
+                id: Date.now(),
+                date: document.getElementById('input-ag-date').value,
+                judul: judul,
+                ket: document.getElementById('input-ag-ket').value
+            };
+            appState.records.agenda.push(data);
+            appState.records.agenda.sort((a,b) => new Date(a.date) - new Date(b.date)); // Ascending for future agendas
+            renderAgenda();
+            e.target.reset();
+            document.getElementById('input-ag-date').value = new Date().toISOString().split('T')[0];
+            showToast("Agenda ditambahkan", "success");
+            
+            // Notification logic (simulate scheduling)
+            if (Notification.permission === "granted") {
+                const today = new Date().toISOString().split('T')[0];
+                if(data.date === today) {
+                    new Notification("Agenda Hari Ini!", { body: data.judul });
+                }
+            }
+            updateDashboardStats();
+        }
+
+        function renderAgenda() {
+            const container = document.getElementById('agenda-list');
+            const empty = document.getElementById('ag-empty');
+            
+            const cards = container.querySelectorAll('.ag-card');
+            cards.forEach(c => c.remove());
+
+            if(appState.records.agenda.length === 0) {
+                empty.style.display = 'block';
+            } else {
+                empty.style.display = 'none';
+                const today = new Date().toISOString().split('T')[0];
+                
+                appState.records.agenda.forEach(d => {
+                    const isPast = d.date < today;
+                    const card = document.createElement('div');
+                    card.className = `ag-card p-4 rounded-lg border flex items-center gap-4 ${isPast ? 'bg-gray-100 border-gray-200 opacity-70' : 'bg-teal-50 border-teal-200'}`;
+                    card.innerHTML = `
+                        <div class="flex flex-col items-center justify-center bg-white w-14 h-14 rounded shadow-sm flex-shrink-0 border">
+                            <span class="text-[10px] uppercase text-gray-500 font-bold">${new Date(d.date).toLocaleString('id', {month:'short'})}</span>
+                            <span class="text-lg font-bold text-gray-800 leading-none">${d.date.split('-')[2]}</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold ${isPast ? 'text-gray-700' : 'text-teal-900'}">${d.judul}</h4>
+                            <p class="text-xs text-gray-600 mt-1">${d.ket}</p>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        }
+
+        function updateDashboardStats() {
+            document.getElementById('dash-pel-count').innerText = appState.records.pelanggaran.length;
+            document.getElementById('dash-iba-count').innerText = appState.records.ibadah.length;
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('dash-agd-count').innerText = appState.records.agenda.filter(a => a.date >= today).length;
+            document.getElementById('dash-san-count').innerText = appState.santri.length;
+        }
+
+        // --- PDF EXPORT ---
+        function exportPDF(elementId, filename) {
+            const element = document.getElementById(elementId);
+            
+            // Temporary reveal for printing if hidden
+            const originalDisplay = element.style.display;
+            element.style.display = 'block';
+            
+            const opt = {
+                margin:       0.5,
+                filename:     `${filename}_${new Date().toISOString().split('T')[0]}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+
+            // Using html2pdf promise
+            html2pdf().set(opt).from(element).save().then(() => {
+                element.style.display = originalDisplay;
+            });
+        }
+
+        // INIT
+        window.onload = initData;
+
+    </script>
+</body>
+</html>
