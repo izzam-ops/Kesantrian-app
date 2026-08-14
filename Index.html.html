@@ -1,0 +1,2101 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kesantrian - Ponpes Taruna Alquran Kampus 2</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            200: '#bae0fd',
+                            500: '#2563eb',
+                            600: '#1d4ed8',
+                            700: '#1e40af',
+                            800: '#1e3a8a',
+                            900: '#172554',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js for Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- html2pdf.js for Exporting PDFs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.25s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Autocomplete dropdown style */
+        .autocomplete-items {
+            position: absolute;
+            border: 1px solid #cbd5e1;
+            border-top: none;
+            z-index: 99;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: #ffffff;
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+            max-height: 200px;
+            overflow-y: auto;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .autocomplete-items div {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .autocomplete-items div:hover {
+            background-color: #eff6ff;
+            color: #1d4ed8;
+            font-weight: 600;
+        }
+
+        .printable-area {
+            background: white;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased bg-slate-50">
+
+    <!-- Header Section -->
+    <header class="bg-gradient-to-r from-brand-900 via-brand-800 to-brand-700 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-3">
+                
+                <!-- Logo & Institution Info -->
+                <div class="flex items-center space-x-3 text-center md:text-left">
+                    <div class="bg-white/10 p-2.5 rounded-xl backdrop-blur-md border border-white/20 flex items-center justify-center">
+                        <!-- Islamic Boarding School Custom SVG Logo -->
+                        <svg class="w-9 h-9 text-blue-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                            <path d="M2 17l10 5 10-5"/>
+                            <path d="M2 12l10 5 10-5"/>
+                            <circle cx="12" cy="12" r="3" fill="currentColor" fill-opacity="0.3"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-white flex items-center gap-2">
+                            PONDOK PESANTREN TARUNA ALQURAN 
+                            <span class="bg-blue-500/30 text-blue-100 text-xs px-2 py-0.5 rounded-md border border-blue-300/30 font-medium">KAMPUS 2</span>
+                        </h1>
+                        <p class="text-xs text-blue-100 font-medium tracking-wide">SISTEM KESANTRIAN & KEPENGASUHAN USTADZ</p>
+                    </div>
+                </div>
+
+                <!-- Real-time Clock & System Date Sync -->
+                <div class="flex items-center space-x-4 bg-white/10 px-4 py-2 rounded-lg backdrop-blur-sm border border-white/10 text-xs sm:text-sm">
+                    <div class="text-right">
+                        <div id="realtime-date" class="font-semibold text-blue-100">Selasa, 11 Agustus 2026</div>
+                        <div id="realtime-clock" class="text-xs text-blue-200 font-mono">00:00:00 WIB</div>
+                    </div>
+                    <i class="fa-regular fa-clock text-blue-200 text-lg"></i>
+                </div>
+
+            </div>
+        </div>
+        
+        <!-- Navigation Bar -->
+        <nav class="bg-brand-900/80 backdrop-blur-md border-t border-brand-700/50 overflow-x-auto no-scrollbar">
+            <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+                <div class="flex space-x-1 py-1.5 min-w-max">
+                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn active px-3 py-2 rounded-lg text-xs sm:text-sm font-semibold flex items-center gap-2 text-white bg-brand-600 transition">
+                        <i class="fa-solid fa-chart-line"></i> Beranda
+                    </button>
+                    <button onclick="switchTab('santri')" id="nav-santri" class="nav-btn px-3 py-2 rounded-lg text-xs sm:text-sm font-medium flex items-center gap-2 text-blue-100 hover:bg-brand-800 transition">
+                        <i class="fa-solid fa-user-graduate"></i> Data Santri
+                    </button>
+                    <button onclick="switchTab('pelanggaran')" id="nav-pelanggaran" class="nav-btn px-3 py-2 rounded-lg text-xs sm:text-sm font-medium flex items-center gap-2 text-blue-100 hover:bg-brand-800 transition">
+                        <i class="fa-solid fa-triangle-exclamation"></i> Pelanggaran
+                    </button>
+                    <button onclick="switchTab('ibadah')" id="nav-ibadah" class="nav-btn px-3 py-2 rounded-lg text-xs sm:text-sm font-medium flex items-center gap-2 text-blue-100 hover:bg-brand-800 transition">
+                        <i class="fa-solid fa-mosque"></i> Pelanggaran Ibadah
+                    </button>
+                    <button onclick="switchTab('jagamalam')" id="nav-jagamalam" class="nav-btn px-3 py-2 rounded-lg text-xs sm:text-sm font-medium flex items-center gap-2 text-blue-100 hover:bg-brand-800 transition">
+                        <i class="fa-solid fa-moon"></i> Jaga Malam
+                    </button>
+                    <button onclick="switchTab('agenda')" id="nav-agenda" class="nav-btn px-3 py-2 rounded-lg text-xs sm:text-sm font-medium flex items-center gap-2 text-blue-100 hover:bg-brand-800 transition">
+                        <i class="fa-solid fa-calendar-check"></i> Agenda & Pengingat
+                    </button>
+                    <button onclick="switchTab('kamar')" id="nav-kamar" class="nav-btn px-3 py-2 rounded-lg text-xs sm:text-sm font-medium flex items-center gap-2 text-blue-100 hover:bg-brand-800 transition">
+                        <i class="fa-solid fa-bed"></i> Penilaian Kamar
+                    </button>
+                    <button onclick="switchTab('kebersihan')" id="nav-kebersihan" class="nav-btn px-3 py-2 rounded-lg text-xs sm:text-sm font-medium flex items-center gap-2 text-blue-100 hover:bg-brand-800 transition">
+                        <i class="fa-solid fa-broom"></i> Kebersihan & Piket
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- TAB 1: BERANDA / DASHBOARD -->
+        <section id="tab-dashboard" class="tab-content active space-y-6">
+            <!-- Welcome Banner -->
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200/80 flex flex-col md:flex-row items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl sm:text-2xl font-extrabold text-slate-800">
+                        Ahlan wa Sahlan, Ustadz! 🌿
+                    </h2>
+                    <p class="text-slate-600 text-sm mt-1">
+                        Portal Pendataan & Rekapan Kesantrian Pondok Pesantren Taruna Alquran Kampus 2.
+                    </p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="switchTab('pelanggaran')" class="bg-brand-600 hover:bg-brand-700 text-white font-medium text-xs sm:text-sm px-4 py-2.5 rounded-xl shadow hover:shadow-md transition flex items-center gap-2">
+                        <i class="fa-solid fa-plus-circle"></i> Input Pelanggaran
+                    </button>
+                    <button onclick="switchTab('ibadah')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-xs sm:text-sm px-4 py-2.5 rounded-xl shadow hover:shadow-md transition flex items-center gap-2">
+                        <i class="fa-solid fa-mosque"></i> Catat Ibadah
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dashboard Metric Cards -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
+                    <div class="p-3 bg-blue-100 text-brand-700 rounded-xl">
+                        <i class="fa-solid fa-users text-2xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Santri</p>
+                        <h3 class="text-2xl font-bold text-slate-800" id="dash-total-santri">159</h3>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
+                    <div class="p-3 bg-amber-100 text-amber-700 rounded-xl">
+                        <i class="fa-solid fa-triangle-exclamation text-2xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Pelanggaran Hari Ini</p>
+                        <h3 class="text-2xl font-bold text-slate-800" id="dash-total-pelanggaran">0</h3>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
+                    <div class="p-3 bg-purple-100 text-purple-700 rounded-xl">
+                        <i class="fa-solid fa-calendar-day text-2xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Agenda Penting</p>
+                        <h3 class="text-2xl font-bold text-slate-800" id="dash-total-agenda">0</h3>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
+                    <div class="p-3 bg-emerald-100 text-emerald-700 rounded-xl">
+                        <i class="fa-solid fa-star text-2xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Kamar Terbaik Hari Ini</p>
+                        <h3 class="text-lg font-bold text-slate-800" id="dash-kamar-terbaik">-</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts & Quick Analysis Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+                    <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-pie text-brand-600"></i> Analisis Pelanggaran Berdasarkan Kategori
+                    </h3>
+                    <div class="h-64 relative">
+                        <canvas id="chartPelanggaran"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+                    <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-bar text-brand-600"></i> Pelanggaran Ibadah Menurut Waktu Sholat
+                    </h3>
+                    <div class="h-64 relative">
+                        <canvas id="chartIbadah"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: DATA SANTRI -->
+        <section id="tab-santri" class="tab-content space-y-6">
+            <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-address-book text-brand-600"></i> Data Santri Pesantren
+                        </h2>
+                        <p class="text-xs text-slate-500">Daftar lengkap 159 Santri beserta Asrama dan Kamar.</p>
+                    </div>
+
+                    <!-- Filter Controls -->
+                    <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+                        <input type="text" id="search-santri" onkeyup="filterSantriTable()" placeholder="Cari Nama / NIS..." class="px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-brand-500 outline-none w-full sm:w-48">
+                        <select id="filter-kelas" onchange="filterSantriTable()" class="px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+                            <option value="">Semua Kelas</option>
+                            <option value="7-D">7-D</option>
+                            <option value="8-D">8-D</option>
+                            <option value="8-E">8-E</option>
+                            <option value="9-D">9-D</option>
+                            <option value="9-E">9-E</option>
+                        </select>
+                        <select id="filter-asrama" onchange="filterSantriTable()" class="px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+                            <option value="">Semua Asrama</option>
+                            <option value="Asia">Asrama Asia</option>
+                            <option value="Afrika">Asrama Afrika</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Santri Table -->
+                <div class="overflow-x-auto rounded-xl border border-slate-200">
+                    <table class="w-full text-left text-xs sm:text-sm text-slate-700">
+                        <thead class="bg-brand-50 text-brand-900 font-bold uppercase text-[11px] tracking-wider border-b border-slate-200">
+                            <tr>
+                                <th class="py-3 px-4">No</th>
+                                <th class="py-3 px-4">NIS</th>
+                                <th class="py-3 px-4">Nama Santri</th>
+                                <th class="py-3 px-4">Kelas</th>
+                                <th class="py-3 px-4">Asrama</th>
+                                <th class="py-3 px-4">Kamar</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-santri-body" class="divide-y divide-slate-100">
+                            <!-- Populated dynamically via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: PELANGGARAN SANTRI -->
+        <section id="tab-pelanggaran" class="tab-content space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                <!-- Input Form Pelanggaran -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
+                    <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-pen-to-square text-brand-600"></i> Input Pelanggaran Santri
+                    </h3>
+                    
+                    <form id="form-pelanggaran" onsubmit="savePelanggaran(event)" class="space-y-4">
+                        <!-- Autocomplete Santri Input -->
+                        <div class="relative">
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Nama / NIS Santri</label>
+                            <input type="text" id="input-pelanggaran-santri" autocomplete="off" placeholder="Ketik nama atau NIS..." required class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+                            <div id="autocomplete-list" class="autocomplete-items hidden"></div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">NIS</label>
+                                <input type="text" id="input-pelanggaran-nis" readonly class="w-full px-3 py-2 bg-slate-100 border border-slate-300 rounded-xl text-xs sm:text-sm text-slate-600">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Kelas</label>
+                                <input type="text" id="input-pelanggaran-kelas" readonly class="w-full px-3 py-2 bg-slate-100 border border-slate-300 rounded-xl text-xs sm:text-sm text-slate-600">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Kategori Pelanggaran</label>
+                            <select id="input-pelanggaran-kategori" onchange="updatePeraturanDropdown()" required class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+                                <option value="">-- Pilih Kategori --</option>
+                                <option value="Ringan">Ringan</option>
+                                <option value="Sedang">Sedang</option>
+                                <option value="Berat">Berat</option>
+                                <option value="Sangat Berat">Sangat Berat</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Jenis Peraturan</label>
+                            <select id="input-pelanggaran-peraturan" required class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+                                <option value="">-- Pilih Peraturan --</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Tanggal & Waktu Real</label>
+                            <input type="datetime-local" id="input-pelanggaran-tanggal" required class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Keterangan / Catatan Ustadz</label>
+                            <textarea id="input-pelanggaran-keterangan" rows="3" placeholder="Detail kronologi / tindakan pimpinan..." class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-brand-500 outline-none"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow transition">
+                            Simpan Pelanggaran
+                        </button>
+                    </form>
+
+                    <!-- Add Custom Regulation Modal Toggle -->
+                    <div class="pt-4 border-t border-slate-200">
+                        <button onclick="togglePeraturanModal()" class="w-full py-2 border border-slate-300 hover:bg-slate-50 text-slate-700 font-medium text-xs rounded-xl transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-plus"></i> Tambah Peraturan & Keterangan Baru
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Table Rekapan Pelanggaran -->
+                <div class="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                                <i class="fa-solid fa-list-check text-brand-600"></i> Rekapan Pelanggaran Santri
+                            </h3>
+                            <p class="text-xs text-slate-500">Filter rekapitulasi Harian, Mingguan, Bulanan, & Semester.</p>
+                        </div>
+
+                        <!-- Rekap Filter Controls -->
+                        <div class="flex flex-wrap items-center gap-2">
+                            <select id="rekap-periode" onchange="renderPelanggaranTable()" class="px-3 py-1.5 border border-slate-300 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-brand-500 outline-none">
+                                <option value="semua">Semua Waktu</option>
+                                <option value="harian">Hari Ini</option>
+                                <option value="mingguan">Minggu Ini</option>
+                                <option value="bulanan">Bulan Ini</option>
+                                <option value="semester">Semester Ini</option>
+                            </select>
+                            
+                            <button onclick="exportPelanggaranPDF()" class="bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-3 py-1.5 rounded-xl shadow transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-file-pdf"></i> Ekspor PDF
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Table Area for Export -->
+                    <div id="pdf-area-pelanggaran" class="overflow-x-auto rounded-xl border border-slate-200">
+                        <div class="printable-area">
+                            <div class="text-center mb-4 hidden print-header">
+                                <h2 class="text-base font-bold">PONDOK PESANTREN TARUNA ALQURAN KAMPUS 2</h2>
+                                <p class="text-xs">REKAPITULASI PELANGGARAN SANTRI</p>
+                                <hr class="my-2">
+                            </div>
+                            <table class="w-full text-left text-xs text-slate-700">
+                                <thead class="bg-brand-50 text-brand-900 font-bold uppercase text-[10px] tracking-wider border-b border-slate-200">
+                                    <tr>
+                                        <th class="py-2.5 px-3">Tanggal</th>
+                                        <th class="py-2.5 px-3">NIS & Nama</th>
+                                        <th class="py-2.5 px-3">Kelas</th>
+                                        <th class="py-2.5 px-3">Kategori</th>
+                                        <th class="py-2.5 px-3">Peraturan</th>
+                                        <th class="py-2.5 px-3">Keterangan</th>
+                                        <th class="py-2.5 px-3 no-print">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-pelanggaran-body" class="divide-y divide-slate-100">
+                                    <!-- Empty initial state -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- TAB 4: PELANGGARAN IBADAH SANTRI -->
+        <section id="tab-ibadah" class="tab-content space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                <!-- Input Form Pelanggaran Ibadah -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
+                    <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-mosque text-brand-600"></i> Catat Pelanggaran Ibadah
+                    </h3>
+
+                    <form id="form-ibadah" onsubmit="savePelanggaranIbadah(event)" class="space-y-4">
+                        <!-- Autocomplete Santri -->
+                        <div class="relative">
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Nama / NIS Santri</label>
+                            <input type="text" id="input-ibadah-santri" autocomplete="off" placeholder="Ketik nama atau NIS..." required class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+                            <div id="autocomplete-list-ibadah" class="autocomplete-items hidden"></div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">NIS</label>
+                                <input type="text" id="input-ibadah-nis" readonly class="w-full px-3 py-2 bg-slate-100 border border-slate-300 rounded-xl text-xs sm:text-sm text-slate-600">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Kelas</label>
+                                <input type="text" id="input-ibadah-kelas" readonly class="w-full px-3 py-2 bg-slate-100 border border-slate-300 rounded-xl text-xs sm:text-sm text-slate-600">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Waktu Sholat</label>
+                            <select id="input-ibadah-sholat" required class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+                                <option value="Shubuh">Shubuh</option>
+                                <option value="Dzuhur">Dzuhur</option>
+                                <option value="Ashar">Ashar</option>
+                                <option value="Maghrib">Maghrib</option>
+                                <option value="Isya">Isya</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Jenis Pelanggaran Point Ibadah</label>
+                            <select id="input-ibadah-kode" required class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+                                <option value="A">A - Terlambat masuk masjid</option>
+                                <option value="O">O - Tidak memakai atribut ibadah (peci dan sarung)</option>
+                                <option value="N">N - Ngobrol ketika baina adzan dan iqomah</option>
+                                <option value="X">X - Tidak sholat di masjid berjamaah</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Tanggal Sholat</label>
+                            <input type="date" id="input-ibadah-tanggal" required class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Catatan Tambahan</label>
+                            <input type="text" id="input-ibadah-catatan" placeholder="Opsional..." class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+                        </div>
+
+                        <button type="submit" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow transition">
+                            Catat Pelanggaran Ibadah
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Table Rekapan Pelanggaran Ibadah -->
+                <div class="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                                <i class="fa-solid fa-list-numeric text-brand-600"></i> Rekapan Pelanggaran Ibadah
+                            </h3>
+                            <p class="text-xs text-slate-500">Rekap Point A, O, N, X per Waktu Sholat.</p>
+                        </div>
+
+                        <div class="flex flex-wrap items-center gap-2">
+                            <select id="rekap-ibadah-periode" onchange="renderIbadahTable()" class="px-3 py-1.5 border border-slate-300 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-brand-500 outline-none">
+                                <option value="semua">Semua Waktu</option>
+                                <option value="harian">Hari Ini</option>
+                                <option value="mingguan">Minggu Ini</option>
+                                <option value="bulanan">Bulan Ini</option>
+                                <option value="semester">Semester Ini</option>
+                            </select>
+
+                            <button onclick="exportIbadahPDF()" class="bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-3 py-1.5 rounded-xl shadow transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-file-pdf"></i> Ekspor PDF
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="pdf-area-ibadah" class="overflow-x-auto rounded-xl border border-slate-200">
+                        <div class="printable-area">
+                            <div class="text-center mb-4 hidden print-header">
+                                <h2 class="text-base font-bold">PONDOK PESANTREN TARUNA ALQURAN KAMPUS 2</h2>
+                                <p class="text-xs">REKAPITULASI PELANGGARAN IBADAH SANTRI</p>
+                                <hr class="my-2">
+                            </div>
+                            <table class="w-full text-left text-xs text-slate-700">
+                                <thead class="bg-brand-50 text-brand-900 font-bold uppercase text-[10px] tracking-wider border-b border-slate-200">
+                                    <tr>
+                                        <th class="py-2.5 px-3">Tanggal</th>
+                                        <th class="py-2.5 px-3">Nama & NIS</th>
+                                        <th class="py-2.5 px-3">Kelas</th>
+                                        <th class="py-2.5 px-3">Waktu Sholat</th>
+                                        <th class="py-2.5 px-3">Point Kode</th>
+                                        <th class="py-2.5 px-3">Keterangan Point</th>
+                                        <th class="py-2.5 px-3 no-print">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-ibadah-body" class="divide-y divide-slate-100">
+                                    <!-- Empty initial state -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- TAB 5: JAGA MALAM -->
+        <section id="tab-jagamalam" class="tab-content space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Form Input Jaga Malam -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
+                    <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-shield-halved text-brand-600"></i> Form Jaga Malam Ustadz
+                    </h3>
+
+                    <form id="form-jagamalam" onsubmit="saveJagaMalam(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Tanggal Piket Jaga</label>
+                            <input type="date" id="input-jaga-tanggal" required class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Ustadz / Petugas Piket</label>
+                            <input type="text" id="input-jaga-ustadz" placeholder="Nama Ustadz..." required class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Shift Jam Ronda</label>
+                            <select id="input-jaga-shift" required class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+                                <option value="Shift 1 (22.00 - 01.00 WIB)">Shift 1 (22.00 - 01.00 WIB)</option>
+                                <option value="Shift 2 (01.00 - 04.00 WIB)">Shift 2 (01.00 - 04.00 WIB)</option>
+                                <option value="Full Night (22.00 - Subuh)">Full Night (22.00 - Subuh)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Status Kondisi Keamanan</label>
+                            <select id="input-jaga-status" required class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+                                <option value="Aman & Kondusif">Aman & Kondusif</option>
+                                <option value="Ditemukan Pelanggaran">Ditemukan Pelanggaran</option>
+                                <option value="Perlu Perhatian Khusus">Perlu Perhatian Khusus</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Catatan Kejadian / Ronda Malam</label>
+                            <textarea id="input-jaga-catatan" rows="3" placeholder="Sebutkan temuan ronda atau kondisi kamar santri..." class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-brand-500 outline-none"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow transition">
+                            Simpan Laporan Jaga Malam
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Table Rekapan Jaga Malam -->
+                <div class="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
+                    <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-clock-rotate-left text-brand-600"></i> Log Rekapan Jaga Malam
+                    </h3>
+
+                    <div class="overflow-x-auto rounded-xl border border-slate-200">
+                        <table class="w-full text-left text-xs text-slate-700">
+                            <thead class="bg-brand-50 text-brand-900 font-bold uppercase text-[10px] tracking-wider border-b border-slate-200">
+                                <tr>
+                                    <th class="py-2.5 px-3">Tanggal</th>
+                                    <th class="py-2.5 px-3">Ustadz Piket</th>
+                                    <th class="py-2.5 px-3">Shift</th>
+                                    <th class="py-2.5 px-3">Kondisi</th>
+                                    <th class="py-2.5 px-3">Catatan Ronda</th>
+                                    <th class="py-2.5 px-3">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-jaga-body" class="divide-y divide-slate-100">
+                                <!-- Empty initial state -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 6: AGENDA & PENGINGAT -->
+        <section id="tab-agenda" class="tab-content space-y-6">
+            <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-200 pb-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-calendar-days text-brand-600"></i> Agenda & Pengingat Penting Santri
+                        </h2>
+                        <p class="text-xs text-slate-500">Jadwal kegiatan, penjengukan, outing class, dan notifikasi pengingat otomatis.</p>
+                    </div>
+
+                    <!-- Notification Permission Button -->
+                    <button onclick="requestNotificationPermission()" id="btn-notif-perm" class="bg-brand-600 hover:bg-brand-700 text-white font-medium text-xs sm:text-sm px-4 py-2 rounded-xl shadow transition flex items-center gap-2">
+                        <i class="fa-solid fa-bell"></i> Aktifkan Notifikasi Pengingat
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Form Input Agenda -->
+                    <div class="space-y-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <h3 class="font-bold text-slate-800 text-sm">Tambah Agenda Penting Baru</h3>
+
+                        <form id="form-agenda" onsubmit="saveAgenda(event)" class="space-y-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Judul Agenda</label>
+                                <input type="text" id="input-agenda-judul" list="agenda-title-suggestions" oninput="toggleLainLainField()" placeholder="Pilih atau ketik agenda..." required class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+                                <datalist id="agenda-title-suggestions">
+                                    <option value="Penjengukan santri">
+                                    <option value="Kunjungan ke pasar">
+                                    <option value="Study tour">
+                                    <option value="Outing class">
+                                    <option value="Renang">
+                                    <option value="Lomba masak">
+                                    <option value="Lain-lain">
+                                </datalist>
+                            </div>
+
+                            <!-- Custom detail for Lain-lain -->
+                            <div id="wrapper-agenda-lain" class="hidden">
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Keterangan Judul Lain-lain</label>
+                                <input type="text" id="input-agenda-lain" placeholder="Sebutkan kegiatan spesifik..." class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Tanggal Agenda</label>
+                                <input type="date" id="input-agenda-tanggal" required class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Waktu / Jam Pengingat</label>
+                                <input type="time" id="input-agenda-waktu" required class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Detail Keterangan Agenda</label>
+                                <textarea id="input-agenda-keterangan" rows="3" placeholder="Informasi detail mengenai agenda..." class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-brand-500 outline-none"></textarea>
+                            </div>
+
+                            <button type="submit" class="w-full py-2 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow transition">
+                                Simpan Agenda & Set Pengingat
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Agenda List Card Timeline -->
+                    <div class="lg:col-span-2 space-y-4">
+                        <h3 class="font-bold text-slate-800 text-sm">Daftar Agenda Penting Pesantren</h3>
+                        
+                        <div id="agenda-list-container" class="space-y-3">
+                            <!-- Empty initial state -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 7: PENILAIAN KAMAR -->
+        <section id="tab-kamar" class="tab-content space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                <!-- Room Evaluation Form -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
+                    <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-list-check text-brand-600"></i> Form Penilaian Kamar
+                    </h3>
+
+                    <form id="form-kamar" onsubmit="savePenilaianKamar(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Pilih Asrama</label>
+                            <select id="input-kamar-asrama" onchange="updateKamarDropdown()" required class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+                                <option value="">-- Pilih Asrama --</option>
+                                <option value="Asia">Asrama Asia</option>
+                                <option value="Afrika">Asrama Afrika</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Kamar</label>
+                            <select id="input-kamar-nama" required class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+                                <option value="">-- Pilih Kamar --</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Tanggal Penilaian</label>
+                            <input type="date" id="input-kamar-tanggal" required class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+                        </div>
+
+                        <!-- Checklists for 5 criteria -->
+                        <div class="space-y-2 border-t border-b border-slate-200 py-3">
+                            <p class="text-xs font-bold text-slate-800">Kategori Evaluasi Kebersihan:</p>
+                            
+                            <label class="flex items-center space-x-2 text-xs font-medium text-slate-700 cursor-pointer">
+                                <input type="checkbox" id="kamar-c1" class="w-4 h-4 text-brand-600 rounded">
+                                <span>1. Atas ranjang rapi</span>
+                            </label>
+
+                            <label class="flex items-center space-x-2 text-xs font-medium text-slate-700 cursor-pointer">
+                                <input type="checkbox" id="kamar-c2" class="w-4 h-4 text-brand-600 rounded">
+                                <span>2. Atas lemari bersih</span>
+                            </label>
+
+                            <label class="flex items-center space-x-2 text-xs font-medium text-slate-700 cursor-pointer">
+                                <input type="checkbox" id="kamar-c3" class="w-4 h-4 text-brand-600 rounded">
+                                <span>3. Lantai bersih</span>
+                            </label>
+
+                            <label class="flex items-center space-x-2 text-xs font-medium text-slate-700 cursor-pointer">
+                                <input type="checkbox" id="kamar-c4" class="w-4 h-4 text-brand-600 rounded">
+                                <span>4. Ember-ember ditumpuk dengan rapi</span>
+                            </label>
+
+                            <label class="flex items-center space-x-2 text-xs font-medium text-slate-700 cursor-pointer">
+                                <input type="checkbox" id="kamar-c5" class="w-4 h-4 text-brand-600 rounded">
+                                <span>5. Tidak ada gantungan yang tidak rapi</span>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow transition">
+                            Simpan Penilaian Kamar
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Best & Worst Kamar Summary + Evaluation Log Table -->
+                <div class="lg:col-span-2 space-y-6">
+                    
+                    <!-- Ranking Cards -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-gradient-to-br from-emerald-50 to-emerald-100 p-5 rounded-2xl border border-emerald-200 text-emerald-900 flex items-center justify-between shadow-sm">
+                            <div>
+                                <span class="bg-emerald-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded uppercase">Kamar Terbaik</span>
+                                <h4 class="text-xl font-black mt-2" id="kamar-terbaik-name">-</h4>
+                                <p class="text-xs text-emerald-700" id="kamar-terbaik-score">Skor: - / 100</p>
+                            </div>
+                            <i class="fa-solid fa-trophy text-4xl text-emerald-500 opacity-80"></i>
+                        </div>
+
+                        <div class="bg-gradient-to-br from-rose-50 to-rose-100 p-5 rounded-2xl border border-rose-200 text-rose-900 flex items-center justify-between shadow-sm">
+                            <div>
+                                <span class="bg-rose-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded uppercase">Kamar Terburuk</span>
+                                <h4 class="text-xl font-black mt-2" id="kamar-terburuk-name">-</h4>
+                                <p class="text-xs text-rose-700" id="kamar-terburuk-score">Skor: - / 100</p>
+                            </div>
+                            <i class="fa-solid fa-triangle-exclamation text-4xl text-rose-500 opacity-80"></i>
+                        </div>
+                    </div>
+
+                    <!-- Evaluation Table -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
+                        <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-table text-brand-600"></i> Riwayat Penilaian Kamar
+                        </h3>
+
+                        <div class="overflow-x-auto rounded-xl border border-slate-200">
+                            <table class="w-full text-left text-xs text-slate-700">
+                                <thead class="bg-brand-50 text-brand-900 font-bold uppercase text-[10px] tracking-wider border-b border-slate-200">
+                                    <tr>
+                                        <th class="py-2.5 px-3">Tanggal</th>
+                                        <th class="py-2.5 px-3">Asrama</th>
+                                        <th class="py-2.5 px-3">Kamar</th>
+                                        <th class="py-2.5 px-3">Hasil Checklist</th>
+                                        <th class="py-2.5 px-3">Skor Total</th>
+                                        <th class="py-2.5 px-3">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-kamar-body" class="divide-y divide-slate-100">
+                                    <!-- Empty initial state -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- TAB 8: KEBERSIHAN & PIKET -->
+        <section id="tab-kebersihan" class="tab-content space-y-6">
+            <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-6">
+                
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-200 pb-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-broom text-brand-600"></i> Pendataan & Checklist Piket Kebersihan
+                        </h2>
+                        <p class="text-xs text-slate-500">Monitoring tuntas piket pagi & sore, area belum tuntas, dan santri alfa piket.</p>
+                    </div>
+
+                    <div class="flex items-center space-x-3">
+                        <input type="date" id="piket-date-select" onchange="renderPiketChecklist()" class="px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold focus:ring-2 focus:ring-brand-500 outline-none">
+                        <select id="piket-shift-select" onchange="renderPiketChecklist()" class="px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold focus:ring-2 focus:ring-brand-500 outline-none">
+                            <option value="Pagi">Piket Pagi</option>
+                            <option value="Sore">Piket Sore</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Category Sub-tabs for Piket Areas -->
+                <div class="flex border-b border-slate-200 space-x-4">
+                    <button onclick="switchPiketZone('halaman')" id="piket-tab-halaman" class="piket-zone-btn pb-2 font-bold text-xs sm:text-sm text-brand-600 border-b-2 border-brand-600">
+                        1. Piket Halaman (26 Area)
+                    </button>
+                    <button onclick="switchPiketZone('asrama')" id="piket-tab-asrama" class="piket-zone-btn pb-2 font-medium text-xs sm:text-sm text-slate-500 border-b-2 border-transparent">
+                        2. Piket Asrama (23 Area)
+                    </button>
+                    <button onclick="switchPiketZone('bawah')" id="piket-tab-bawah" class="piket-zone-btn pb-2 font-medium text-xs sm:text-sm text-slate-500 border-b-2 border-transparent">
+                        3. Piket Bawah (10 Area)
+                    </button>
+                </div>
+
+                <!-- Checklist Grid Area -->
+                <div id="piket-checklist-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                    <!-- Populated dynamically via JS -->
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-6 border-t border-slate-200">
+                    
+                    <!-- Uncompleted Piket Areas Recap -->
+                    <div class="bg-amber-50/70 p-5 rounded-2xl border border-amber-200/80 space-y-3">
+                        <h3 class="font-bold text-amber-900 text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-triangle-exclamation text-amber-600"></i> Rekapan Tempat Piket Belum Tuntas Hari Ini
+                        </h3>
+                        <p class="text-xs text-amber-800">Daftar lokasi yang belum dicentang tuntas pada piket terpilih.</p>
+                        
+                        <div id="uncompleted-piket-list" class="space-y-1.5 max-h-60 overflow-y-auto pr-1">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Santri Tidak Piket Log Form -->
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-4">
+                        <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-user-xmark text-rose-600"></i> Form & Rekap Santri Tidak Piket
+                        </h3>
+
+                        <form id="form-tidak-piket" onsubmit="saveSantriTidakPiket(event)" class="space-y-3">
+                            <div class="relative">
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Nama / NIS Santri</label>
+                                <input type="text" id="input-piket-santri" autocomplete="off" placeholder="Ketik nama atau NIS..." required class="w-full px-3 py-1.5 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-brand-500 outline-none">
+                                <div id="autocomplete-list-piket" class="autocomplete-items hidden"></div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Tempat Piket</label>
+                                    <input type="text" id="input-piket-lokasi" placeholder="Contoh: Halaman Asia..." required class="w-full px-3 py-1.5 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-brand-500 outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Catatan / Alasan</label>
+                                    <input type="text" id="input-piket-alasan" placeholder="Alfa / Sakit / Izin..." class="w-full px-3 py-1.5 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-brand-500 outline-none">
+                                </div>
+                            </div>
+
+                            <button type="submit" class="w-full py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow transition">
+                                Catat Santri Tidak Piket
+                            </button>
+                        </form>
+
+                        <div class="pt-3 border-t border-slate-200">
+                            <p class="text-xs font-bold text-slate-800 mb-2">Daftar Santri Alfa Piket Hari Ini:</p>
+                            <div class="overflow-x-auto rounded-lg border border-slate-200 bg-white">
+                                <table class="w-full text-left text-xs">
+                                    <thead class="bg-slate-100 font-bold uppercase text-[10px]">
+                                        <tr>
+                                            <th class="p-2">Santri</th>
+                                            <th class="p-2">Lokasi Piket</th>
+                                            <th class="p-2">Shift</th>
+                                            <th class="p-2">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="table-tidak-piket-body" class="divide-y divide-slate-100">
+                                        <!-- Empty initial state -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal: Tambah Peraturan Baru -->
+    <div id="modal-peraturan" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 space-y-4">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="font-bold text-slate-800 text-base">Tambah Peraturan Baru</h3>
+                <button onclick="togglePeraturanModal()" class="text-slate-400 hover:text-slate-600 text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="form-custom-peraturan" onsubmit="saveCustomPeraturan(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Kategori Pelanggaran</label>
+                    <select id="modal-peraturan-kategori" required class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+                        <option value="Ringan">Ringan</option>
+                        <option value="Sedang">Sedang</option>
+                        <option value="Berat">Berat</option>
+                        <option value="Sangat Berat">Sangat Berat</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Peraturan Baru</label>
+                    <input type="text" id="modal-peraturan-nama" placeholder="Contoh: Terlambat Masuk Kelas..." required class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Keterangan / Sanksi Default</label>
+                    <textarea id="modal-peraturan-keterangan" rows="3" placeholder="Sebutkan deskripsi sanksi atau tindakan..." class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-brand-500 outline-none"></textarea>
+                </div>
+
+                <div class="flex justify-end space-x-2 pt-2">
+                    <button type="button" onclick="togglePeraturanModal()" class="px-4 py-2 border border-slate-300 rounded-xl text-xs text-slate-600 font-medium hover:bg-slate-50">Batal</button>
+                    <button type="submit" class="px-4 py-2 bg-brand-600 text-white rounded-xl text-xs font-bold hover:bg-brand-700">Simpan Peraturan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Application Logic Javascript -->
+    <script>
+        // Master Raw Data Santri (159 Students)
+        const RAW_SANTRI_LIST = [
+            // Class 7-D
+            { nis: "126011", nama: "Abdurrahman Akhtar Muliawan", kelas: "7-D", asrama: "Asia", kamar: "Saudi" },
+            { nis: "126069", nama: "Abdurrahman Al Fayyadh", kelas: "7-D", asrama: "Asia", kamar: "Saudi" },
+            { nis: "126004", nama: "Ahmad Sukri", kelas: "7-D", asrama: "Asia", kamar: "Yaman" },
+            { nis: "126064", nama: "Ali Fikruddin", kelas: "7-D", asrama: "Asia", kamar: "Yaman" },
+            { nis: "126010", nama: "Aljabbar Shaddam Zhalifunnas", kelas: "7-D", asrama: "Asia", kamar: "Oman" },
+            { nis: "126021", nama: "Arkaan Salman Atarahman", kelas: "7-D", asrama: "Asia", kamar: "Oman" },
+            { nis: "126018", nama: "Arwin Azka Arjaka", kelas: "7-D", asrama: "Asia", kamar: "Yordania" },
+            { nis: "126065", nama: "Azzam Abdurrahman Yasin", kelas: "7-D", asrama: "Asia", kamar: "Yordania" },
+            { nis: "126017", nama: "Banin Ahmad Izzuddin", kelas: "7-D", asrama: "Asia", kamar: "Irak" },
+            { nis: "126091", nama: "Barra kukuh ahsandien", kelas: "7-D", asrama: "Asia", kamar: "Irak" },
+            { nis: "126039", nama: "Bondan Razqo Agustian", kelas: "7-D", asrama: "Asia", kamar: "UEA" },
+            { nis: "126084", nama: "Edsel Afqarila Yusuf", kelas: "7-D", asrama: "Asia", kamar: "UEA" },
+            { nis: "126014", nama: "Fahmi Ammar Assyauqie", kelas: "7-D", asrama: "Asia", kamar: "Kuwait" },
+            { nis: "126049", nama: "Faiz Axelle Alaric", kelas: "7-D", asrama: "Asia", kamar: "Kuwait" },
+            { nis: "126024", nama: "Farras Al Ghuroba Manshour", kelas: "7-D", asrama: "Asia", kamar: "Saudi" },
+            { nis: "126072", nama: "Farras Syazwana Mulya", kelas: "7-D", asrama: "Asia", kamar: "Yaman" },
+            { nis: "126041", nama: "Fizza Nubaid Farezky", kelas: "7-D", asrama: "Asia", kamar: "Oman" },
+            { nis: "126068", nama: "Ghaisan Nizhami Purnomo", kelas: "7-D", asrama: "Asia", kamar: "Yordania" },
+            { nis: "126002", nama: "Haidar Usaimin Shaqib", kelas: "7-D", asrama: "Asia", kamar: "Irak" },
+            { nis: "126033", nama: "Hamdan Alfaruq Siregar", kelas: "7-D", asrama: "Asia", kamar: "UEA" },
+            { nis: "126035", nama: "Hasan Tirtha Yuwana", kelas: "7-D", asrama: "Asia", kamar: "Kuwait" },
+            { nis: "126060", nama: "Ibrahim Abdullah Asy Syaakir", kelas: "7-D", asrama: "Asia", kamar: "Saudi" },
+            { nis: "126074", nama: "Muhammad Afif", kelas: "7-D", asrama: "Asia", kamar: "Yaman" },
+            { nis: "126007", nama: "Muhammad Aqwam El Mubasyir", kelas: "7-D", asrama: "Asia", kamar: "Oman" },
+            { nis: "126083", nama: "Muhammad Athar Alfarezi", kelas: "7-D", asrama: "Asia", kamar: "Yordania" },
+            { nis: "126081", nama: "Muhammad Fadhil Haerani", kelas: "7-D", asrama: "Asia", kamar: "Irak" },
+            { nis: "126029", nama: "Muhammad Hafidz Rafie Habibullah", kelas: "7-D", asrama: "Asia", kamar: "UEA" },
+            { nis: "126009", nama: "Muhammad Idlan Affandi", kelas: "7-D", asrama: "Asia", kamar: "Kuwait" },
+            { nis: "126036", nama: "Muhammad Ilyas Adh Dhukha", kelas: "7-D", asrama: "Asia", kamar: "Saudi" },
+            { nis: "126076", nama: "Muhammad Ismail Hanif", kelas: "7-D", asrama: "Asia", kamar: "Yaman" },
+            { nis: "126082", nama: "Muhammad Nabil Nafis Althof", kelas: "7-D", asrama: "Asia", kamar: "Oman" },
+            { nis: "126026", nama: "Muhammad Yoga Permana", kelas: "7-D", asrama: "Asia", kamar: "Yordania" },
+            { nis: "126048", nama: "Muhammad Zain Azaria", kelas: "7-D", asrama: "Asia", kamar: "Irak" },
+            { nis: "126019", nama: "Saamiy Haidar Syakib", kelas: "7-D", asrama: "Asia", kamar: "UEA" },
+            { nis: "126032", nama: "Salman Abdurrahman Sarjito", kelas: "7-D", asrama: "Asia", kamar: "Kuwait" },
+            { nis: "126005", nama: "Yahya Abdurrahman", kelas: "7-D", asrama: "Asia", kamar: "Saudi" },
+
+            // Class 8-D
+            { nis: "125051", nama: "Abdillah Najib Alfaqih", kelas: "8-D", asrama: "Afrika", kamar: "Mesir" },
+            { nis: "125001", nama: "Abdulloh Fayyaadh", kelas: "8-D", asrama: "Afrika", kamar: "Mesir" },
+            { nis: "125032", nama: "Adam Alif Hanafi", kelas: "8-D", asrama: "Afrika", kamar: "Mauritania" },
+            { nis: "125043", nama: "Afiq Rizqin Rusyaidi", kelas: "8-D", asrama: "Afrika", kamar: "Mauritania" },
+            { nis: "125079", nama: "Abkar Nabil Arrifai", kelas: "8-D", asrama: "Afrika", kamar: "Aljazair" },
+            { nis: "125044", nama: "Albani Irhaq Athariq", kelas: "8-D", asrama: "Afrika", kamar: "Aljazair" },
+            { nis: "125049", nama: "Alif Ramdan Prakoso", kelas: "8-D", asrama: "Afrika", kamar: "Maroko" },
+            { nis: "125054", nama: "Asykar Dzulthariq Mamonto", kelas: "8-D", asrama: "Afrika", kamar: "Maroko" },
+            { nis: "125062", nama: "Athif Abdurrozaq Abu Hamzah", kelas: "8-D", asrama: "Afrika", kamar: "Libya" },
+            { nis: "125027", nama: "Azka Khairinuzul Ayry", kelas: "8-D", asrama: "Afrika", kamar: "Libya" },
+            { nis: "125053", nama: "Barra Zulfahmi Aqil Fauzani", kelas: "8-D", asrama: "Afrika", kamar: "Sudan" },
+            { nis: "125024", nama: "Danish Syahbanda", kelas: "8-D", asrama: "Afrika", kamar: "Sudan" },
+            { nis: "125041", nama: "Fachry Aufa Husain", kelas: "8-D", asrama: "Afrika", kamar: "Mesir" },
+            { nis: "125068", nama: "Faris Arsa Alkautsar", kelas: "8-D", asrama: "Afrika", kamar: "Mauritania" },
+            { nis: "125055", nama: "Fathan Nafi Rafardhan", kelas: "8-D", asrama: "Afrika", kamar: "Aljazair" },
+            { nis: "125006", nama: "Hafiz Nur Tauhid", kelas: "8-D", asrama: "Afrika", kamar: "Maroko" },
+            { nis: "125059", nama: "Hamas Alfath Putra Irawan", kelas: "8-D", asrama: "Afrika", kamar: "Libya" },
+            { nis: "125090", nama: "Hanif Izzuddin Nur M.", kelas: "8-D", asrama: "Afrika", kamar: "Sudan" },
+            { nis: "125019", nama: "Jaluandra Anfieldnou", kelas: "8-D", asrama: "Afrika", kamar: "Mesir" },
+            { nis: "125095", nama: "Kaisar Aditya Gunawan", kelas: "8-D", asrama: "Afrika", kamar: "Mauritania" },
+            { nis: "125102", nama: "Mohammad Maulana Haidar Abrori", kelas: "8-D", asrama: "Afrika", kamar: "Aljazair" },
+            { nis: "125067", nama: "M. Hamas", kelas: "8-D", asrama: "Afrika", kamar: "Maroko" },
+            { nis: "125014", nama: "M. Hazel Reyhan Altair", kelas: "8-D", asrama: "Afrika", kamar: "Libya" },
+            { nis: "125017", nama: "M. Sultan Nabhan", kelas: "8-D", asrama: "Afrika", kamar: "Sudan" },
+            { nis: "125005", nama: "Naufal Adira Mas'Ud", kelas: "8-D", asrama: "Afrika", kamar: "Mesir" },
+            { nis: "125021", nama: "Nuju Prana Ru Bagus Setiawan", kelas: "8-D", asrama: "Afrika", kamar: "Mauritania" },
+            { nis: "125045", nama: "Rakha Rajendra Hidayatulloh", kelas: "8-D", asrama: "Afrika", kamar: "Aljazair" },
+            { nis: "125077", nama: "Sakti Bulan Kristianto", kelas: "8-D", asrama: "Afrika", kamar: "Maroko" },
+            { nis: "125009", nama: "Taftazani Zukhdi Ar-Rosyid", kelas: "8-D", asrama: "Afrika", kamar: "Libya" },
+            { nis: "125035", nama: "Wildan M. Arvian", kelas: "8-D", asrama: "Afrika", kamar: "Sudan" },
+            { nis: "125039", nama: "Zlatan Emir Rasyid", kelas: "8-D", asrama: "Afrika", kamar: "Mesir" },
+
+            // Class 8-E
+            { nis: "125037", nama: "Abdullah Faiz", kelas: "8-E", asrama: "Asia", kamar: "Saudi" },
+            { nis: "125016", nama: "Abinaya Rindra Setya Azurite", kelas: "8-E", asrama: "Asia", kamar: "Saudi" },
+            { nis: "125080", nama: "Adam Daniyal", kelas: "8-E", asrama: "Asia", kamar: "Yaman" },
+            { nis: "125096", nama: "Afkar Rafan Aidan", kelas: "8-E", asrama: "Asia", kamar: "Yaman" },
+            { nis: "125026", nama: "Akyas Syauqi Zamzami", kelas: "8-E", asrama: "Asia", kamar: "Oman" },
+            { nis: "125070", nama: "Alief Khoirul Anam", kelas: "8-E", asrama: "Asia", kamar: "Oman" },
+            { nis: "125031", nama: "Asbiq Fasyarizaz Al Awwabi", kelas: "8-E", asrama: "Asia", kamar: "Yordania" },
+            { nis: "125012", nama: "Asyraf El-Azzam Alfath", kelas: "8-E", asrama: "Asia", kamar: "Yordania" },
+            { nis: "125047", nama: "Aufa Raqilla Danish Ar-Rafif", kelas: "8-E", asrama: "Asia", kamar: "Irak" },
+            { nis: "125073", nama: "Bagus Kinara Hardiyanto", kelas: "8-E", asrama: "Asia", kamar: "Irak" },
+            { nis: "125097", nama: "Birbik Ali M.", kelas: "8-E", asrama: "Asia", kamar: "UEA" },
+            { nis: "125101", nama: "Dzakwan Dharma Al-Firdausi", kelas: "8-E", asrama: "Asia", kamar: "UEA" },
+            { nis: "125010", nama: "Fadhil Ismail", kelas: "8-E", asrama: "Asia", kamar: "Kuwait" },
+            { nis: "125003", nama: "Fathan Al-Maisan Zhafar Syamrohani", kelas: "8-E", asrama: "Asia", kamar: "Kuwait" },
+            { nis: "125050", nama: "Fauzan Abdurrahman At-Thariq", kelas: "8-E", asrama: "Asia", kamar: "Saudi" },
+            { nis: "125100", nama: "Haidar Amri Al Afkari", kelas: "8-E", asrama: "Asia", kamar: "Yaman" },
+            { nis: "125022", nama: "Hamzah Abdurrazaq", kelas: "8-E", asrama: "Asia", kamar: "Oman" },
+            { nis: "125029", nama: "Haniful Arkaan Isahuji", kelas: "8-E", asrama: "Asia", kamar: "Yordania" },
+            { nis: "125091", nama: "Jundan Addien Fatih", kelas: "8-E", asrama: "Asia", kamar: "Irak" },
+            { nis: "125088", nama: "Mirza Ukail Akhmad", kelas: "8-E", asrama: "Asia", kamar: "UEA" },
+            { nis: "125076", nama: "Muhamad Fahrizal Hafizh Al Fatih", kelas: "8-E", asrama: "Asia", kamar: "Kuwait" },
+            { nis: "125025", nama: "M. Akhyar Khoiri", kelas: "8-E", asrama: "Asia", kamar: "Saudi" },
+            { nis: "125052", nama: "M. Hasan Ibrahim Besari", kelas: "8-E", asrama: "Asia", kamar: "Yaman" },
+            { nis: "125056", nama: "M. Hifdzi Ansori", kelas: "8-E", asrama: "Asia", kamar: "Oman" },
+            { nis: "125004", nama: "M. Rasyid Syarifuddin", kelas: "8-E", asrama: "Asia", kamar: "Yordania" },
+            { nis: "125093", nama: "Najmi Hayyan Muthohari", kelas: "8-E", asrama: "Asia", kamar: "Irak" },
+            { nis: "125058", nama: "Nawwaaf Dzakii Fauzi", kelas: "8-E", asrama: "Asia", kamar: "UEA" },
+            { nis: "125030", nama: "Rum Hassa Nindyaswa", kelas: "8-E", asrama: "Asia", kamar: "Kuwait" },
+            { nis: "125008", nama: "Salman Al Farisi", kelas: "8-E", asrama: "Asia", kamar: "Saudi" },
+            { nis: "125106", nama: "Utsman Ubaidillah", kelas: "8-E", asrama: "Asia", kamar: "Yaman" },
+            { nis: "125060", nama: "Ziedna Ribhan Ahmad", kelas: "8-E", asrama: "Asia", kamar: "Oman" },
+
+            // Class 9-D
+            { nis: "124065", nama: "Abdulloh Ahmed Zein", kelas: "9-D", asrama: "Afrika", kamar: "Mesir" },
+            { nis: "124062", nama: "Ahmad Azzam Al Hafizh", kelas: "9-D", asrama: "Afrika", kamar: "Mesir" },
+            { nis: "124066", nama: "Ahmad Faiq Zamroni", kelas: "9-D", asrama: "Afrika", kamar: "Mauritania" },
+            { nis: "124060", nama: "Ahmad Hadir Daris Ilmi", kelas: "9-D", asrama: "Afrika", kamar: "Mauritania" },
+            { nis: "124042", nama: "Ammar Ibnu Baihaqi", kelas: "9-D", asrama: "Afrika", kamar: "Aljazair" },
+            { nis: "124038", nama: "Aqil Jawwad", kelas: "9-D", asrama: "Afrika", kamar: "Aljazair" },
+            { nis: "124043", nama: "Arkan Mufid", kelas: "9-D", asrama: "Afrika", kamar: "Maroko" },
+            { nis: "124046", nama: "Azhar Banyu Prabowo", kelas: "9-D", asrama: "Afrika", kamar: "Maroko" },
+            { nis: "124037", nama: "Azmi Dzaki Hibbaan Hasan", kelas: "9-D", asrama: "Afrika", kamar: "Libya" },
+            { nis: "124049", nama: "Bismaka Annafi Hibatullah", kelas: "9-D", asrama: "Afrika", kamar: "Libya" },
+            { nis: "124061", nama: "Falah Al Abrar Kalikhy", kelas: "9-D", asrama: "Afrika", kamar: "Sudan" },
+            { nis: "124040", nama: "Ghozi Al Ghofi Is Afitaqiy", kelas: "9-D", asrama: "Afrika", kamar: "Sudan" },
+            { nis: "124059", nama: "Haikal Alfarisi Achmad", kelas: "9-D", asrama: "Afrika", kamar: "Mesir" },
+            { nis: "124032", nama: "Isza Dana Dyaksa", kelas: "9-D", asrama: "Afrika", kamar: "Mauritania" },
+            { nis: "124034", nama: "Izzanaqa Fatah Sakha Alfritzy", kelas: "9-D", asrama: "Afrika", kamar: "Aljazair" },
+            { nis: "124033", nama: "Jafar Umar Thariq", kelas: "9-D", asrama: "Afrika", kamar: "Maroko" },
+            { nis: "124035", nama: "Keane Freda Darmawan", kelas: "9-D", asrama: "Afrika", kamar: "Libya" },
+            { nis: "124048", nama: "Khalid Al Walid", kelas: "9-D", asrama: "Afrika", kamar: "Sudan" },
+            { nis: "124057", nama: "Mirza Muhammad Fadhil", kelas: "9-D", asrama: "Afrika", kamar: "Mesir" },
+            { nis: "124051", nama: "Mochammad Asyadil Habibi", kelas: "9-D", asrama: "Afrika", kamar: "Mauritania" },
+            { nis: "124041", nama: "Muhammad Fajar Ulin Nuha", kelas: "9-D", asrama: "Afrika", kamar: "Aljazair" },
+            { nis: "124036", nama: "Muhammad Ghazi Azfar Faiq", kelas: "9-D", asrama: "Afrika", kamar: "Maroko" },
+            { nis: "124053", nama: "Muhammad Ilyas El Valino", kelas: "9-D", asrama: "Afrika", kamar: "Libya" },
+            { nis: "124052", nama: "Muhammad Sabilil Haq", kelas: "9-D", asrama: "Afrika", kamar: "Sudan" },
+            { nis: "124039", nama: "Nadhif Aimar Arifin", kelas: "9-D", asrama: "Afrika", kamar: "Mesir" },
+            { nis: "124055", nama: "Najwan Muhammad Dzaki Musthofa", kelas: "9-D", asrama: "Afrika", kamar: "Mauritania" },
+            { nis: "124056", nama: "Rifhan Putra Novandika", kelas: "9-D", asrama: "Afrika", kamar: "Aljazair" },
+            { nis: "124063", nama: "Rifki Ardiyan Nurrifai", kelas: "9-D", asrama: "Afrika", kamar: "Maroko" },
+            { nis: "124044", nama: "Sajid Zhafran Habibi", kelas: "9-D", asrama: "Afrika", kamar: "Libya" },
+            { nis: "124067", nama: "Zidannuril Huda", kelas: "9-D", asrama: "Afrika", kamar: "Sudan" },
+
+            // Class 9-E
+            { nis: "124079", nama: "Abdullah Awwad Al Rohim", kelas: "9-E", asrama: "Asia", kamar: "Saudi" },
+            { nis: "124087", nama: "Abdullah Hafizh Budiarto", kelas: "9-E", asrama: "Asia", kamar: "Saudi" },
+            { nis: "124084", nama: "Ahmad Sahl Abrisam", kelas: "9-E", asrama: "Asia", kamar: "Yaman" },
+            { nis: "124074", nama: "Ahnaf Al Firaas Yusuf", kelas: "9-E", asrama: "Asia", kamar: "Yaman" },
+            { nis: "124070", nama: "Ali Fathurrahman", kelas: "9-E", asrama: "Asia", kamar: "Oman" },
+            { nis: "124102", nama: "Arkin Haziq Rasendria", kelas: "9-E", asrama: "Asia", kamar: "Oman" },
+            { nis: "124095", nama: "Fachri Yusuf Muammar", kelas: "9-E", asrama: "Asia", kamar: "Yordania" },
+            { nis: "124082", nama: "Fahmi Abdurrahman", kelas: "9-E", asrama: "Asia", kamar: "Yordania" },
+            { nis: "124089", nama: "Faiq Abdurrahman Hafy", kelas: "9-E", asrama: "Asia", kamar: "Irak" },
+            { nis: "124085", nama: "Fajar Abdul Fatah", kelas: "9-E", asrama: "Asia", kamar: "Irak" },
+            { nis: "124094", nama: "Fariz Al Ishaqi", kelas: "9-E", asrama: "Asia", kamar: "UEA" },
+            { nis: "124069", nama: "Ghaisan Rais Ibrohim", kelas: "9-E", asrama: "Asia", kamar: "UEA" },
+            { nis: "124076", nama: "Ghazy Hafizh El Ishaqi", kelas: "9-E", asrama: "Asia", kamar: "Kuwait" },
+            { nis: "124068", nama: "Ibnu Hiban", kelas: "9-E", asrama: "Asia", kamar: "Kuwait" },
+            { nis: "124090", nama: "Izzi Abdullah Hawaary", kelas: "9-E", asrama: "Asia", kamar: "Saudi" },
+            { nis: "124078", nama: "Kholilullah Azka Sholakhudin", kelas: "9-E", asrama: "Asia", kamar: "Yaman" },
+            { nis: "124093", nama: "Maulana Afriza Putra Arghafari", kelas: "9-E", asrama: "Asia", kamar: "Oman" },
+            { nis: "124097", nama: "Mifzal Qori Ahnaf", kelas: "9-E", asrama: "Asia", kamar: "Yordania" },
+            { nis: "124073", nama: "Muchammad Chaidar Alfajri", kelas: "9-E", asrama: "Asia", kamar: "Irak" },
+            { nis: "124104", nama: "Muhammad Azka Hamzah", kelas: "9-E", asrama: "Asia", kamar: "UEA" },
+            { nis: "124071", nama: "Muhammad Dauman Alan Ni`Am", kelas: "9-E", asrama: "Asia", kamar: "Kuwait" },
+            { nis: "124086", nama: "Muhammad Fauzan Rusli", kelas: "9-E", asrama: "Asia", kamar: "Saudi" },
+            { nis: "124083", nama: "Muhammad Jauhar Zuhdan Mujahid Al Hamidy", kelas: "9-E", asrama: "Asia", kamar: "Yaman" },
+            { nis: "124096", nama: "Muhammad Naizar Zein", kelas: "9-E", asrama: "Asia", kamar: "Oman" },
+            { nis: "124075", nama: "Muhammad Rashid Al Fatih", kelas: "9-E", asrama: "Asia", kamar: "Yordania" },
+            { nis: "124098", nama: "Muhammad Rasyid Sulaksono", kelas: "9-E", asrama: "Asia", kamar: "Irak" },
+            { nis: "124100", nama: "Nabil Arrifai", kelas: "9-E", asrama: "Asia", kamar: "UEA" },
+            { nis: "124077", nama: "Riznan Acarya Munif", kelas: "9-E", asrama: "Asia", kamar: "Kuwait" },
+            { nis: "124101", nama: "Sakha Zaidan Umar", kelas: "9-E", asrama: "Asia", kamar: "Saudi" },
+            { nis: "124081", nama: "Syahid Hidayatullah", kelas: "9-E", asrama: "Asia", kamar: "Yaman" },
+            { nis: "124072", nama: "Varhan Atria", kelas: "9-E", asrama: "Asia", kamar: "Oman" }
+        ];
+
+        // Kebersihan Piket Location Lists
+        const PIKET_HALAMAN = [
+            "Belakang Asia", "Belakang Afrika", "Halaman Parkiran", "Tangga Masjid + taman",
+            "Lorong kamar Mandi", "Tandon utara", "Halaman Asia", "Pulau pata",
+            "Halaman Afrika", "Putaran Kantor", "T4 Cuci Santri", "Jemuran Santri",
+            "Jemuran Asatidz", "Gazebo Palestine", "Halaman Masjid", "Gazebo Depan Koperasi",
+            "T4 wudhu Asatidz", "T4 Cuci Aasatidz", "Jalan Utama", "M . Serambi",
+            "M . Teras Luar", "M . Lt1", "M . Lt2", "M . T4 wudhu",
+            "Sampah Afrika", "Sampah Asia", "Sampah Putaran Kantor", "Sampah Atas", "Sampah Bawah"
+        ];
+
+        const PIKET_ASRAMA = [
+            "Kantor DPR", "Dapur Asatidz", "Angkat Galon", "Klinik", "Kantor Pengasuh",
+            "Kantin Bakso", "RO", "Teras Asia + tangga", "L1 Afrika", "L2 Afrika",
+            "L3 Afrika", "Wastafel Tangga Afrika", "Lorong Basement + tangga",
+            "Saudi", "Yaman", "Oman", "Yordania", "Maroko", "Al jazair",
+            "Libya", "Sudan", "Iraq", "UEA", "Mesir", "Kuwait", "Senegal", "Mauritania"
+        ];
+
+        const PIKET_BAWAH = [
+            "Pendopo Kecil", "Putaran Pendopo", "Pendopo Besar 2", "Gazaebo Bawah",
+            "T4 Wudhu Bawah", "Kantor Madrasah", "Putaran Okay", "Tangga Pendopo", "Cuci T4 Sayur"
+        ];
+
+        // Master Regulations Array
+        let masterPeraturan = [
+            { id: 1, kategori: "Ringan", nama: "Terlambat masuk kelas / halaqah", keterangan: "Teguran lisan & nasehat ustadz" },
+            { id: 2, kategori: "Ringan", nama: "Pakaian tidak rapi", keterangan: "Merapikan pakaian & piket tambahan" },
+            { id: 3, kategori: "Sedang", nama: "Keluar kompleks tanpa izin singkat", keterangan: "Peringatan tertulis kesantrian" },
+            { id: 4, kategori: "Berat", nama: "Membawa barang terlarang (Elektronik non-resmi)", keterangan: "Penyitaan & Pemanggilan Orang Tua" },
+            { id: 5, kategori: "Sangat Berat", nama: "Kabur / Meninggalkan pesantren tanpa izin", keterangan: "Sidang Dewan Asatidz & Skorsing" }
+        ];
+
+        // Core State Arrays (Initialized Clean & Empty upon first load)
+        let statePelanggaran = JSON.parse(localStorage.getItem('tp_pelanggaran')) || [];
+        let stateIbadah = JSON.parse(localStorage.getItem('tp_ibadah')) || [];
+        let stateJagaMalam = JSON.parse(localStorage.getItem('tp_jagamalam')) || [];
+        let stateAgenda = JSON.parse(localStorage.getItem('tp_agenda')) || [];
+        let stateKamar = JSON.parse(localStorage.getItem('tp_kamar')) || [];
+        let statePiketChecklist = JSON.parse(localStorage.getItem('tp_piket_check')) || {};
+        let stateSantriTidakPiket = JSON.parse(localStorage.getItem('tp_piket_absent')) || [];
+
+        let currentPiketZone = 'halaman';
+        let chartPelanggaranInstance = null;
+        let chartIbadahInstance = null;
+
+        // On Window Load Initializer
+        window.onload = function() {
+            initRealtimeClock();
+            initDefaultDates();
+            renderSantriTable();
+            renderPelanggaranTable();
+            renderIbadahTable();
+            renderJagaMalamTable();
+            renderAgendaList();
+            renderPenilaianKamarTable();
+            renderPiketChecklist();
+            renderSantriTidakPiketTable();
+            updateDashboardMetrics();
+            initAutocomplete();
+            initCharts();
+            checkUpcomingAgendaNotifications();
+            
+            // Periodical agenda reminder check every 30s
+            setInterval(checkUpcomingAgendaNotifications, 30000);
+        };
+
+        // Realtime Clock Function
+        function initRealtimeClock() {
+            function updateClock() {
+                const now = new Date();
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                document.getElementById('realtime-date').innerText = now.toLocaleDateString('id-ID', options);
+                document.getElementById('realtime-clock').innerText = now.toLocaleTimeString('id-ID') + ' WIB';
+            }
+            updateClock();
+            setInterval(updateClock, 1000);
+        }
+
+        // Default Input Dates
+        function initDefaultDates() {
+            const todayStr = new Date().toISOString().split('T')[0];
+            const nowISO = new Date().toISOString().slice(0, 16);
+
+            document.getElementById('input-pelanggaran-tanggal').value = nowISO;
+            document.getElementById('input-ibadah-tanggal').value = todayStr;
+            document.getElementById('input-jaga-tanggal').value = todayStr;
+            document.getElementById('input-agenda-tanggal').value = todayStr;
+            document.getElementById('input-kamar-tanggal').value = todayStr;
+            document.getElementById('piket-date-select').value = todayStr;
+        }
+
+        // Tab Switcher
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-brand-600', 'text-white', 'active');
+                btn.classList.add('text-blue-100');
+            });
+
+            document.getElementById('tab-' + tabId).classList.add('active');
+            const activeBtn = document.getElementById('nav-' + tabId);
+            activeBtn.classList.add('bg-brand-600', 'text-white', 'active');
+            activeBtn.classList.remove('text-blue-100');
+
+            if (tabId === 'dashboard') {
+                updateDashboardMetrics();
+                updateCharts();
+            }
+        }
+
+        // Render Santri Table
+        function renderSantriTable() {
+            const tbody = document.getElementById('table-santri-body');
+            tbody.innerHTML = '';
+
+            RAW_SANTRI_LIST.forEach((s, idx) => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition border-b border-slate-100";
+                tr.innerHTML = `
+                    <td class="py-2.5 px-4 font-semibold text-slate-400">${idx + 1}</td>
+                    <td class="py-2.5 px-4 font-mono font-bold text-brand-700">${s.nis}</td>
+                    <td class="py-2.5 px-4 font-medium text-slate-800">${s.nama}</td>
+                    <td class="py-2.5 px-4"><span class="bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded-md font-bold">${s.kelas}</span></td>
+                    <td class="py-2.5 px-4 font-medium text-slate-600">Asrama ${s.asrama}</td>
+                    <td class="py-2.5 px-4"><span class="bg-slate-100 text-slate-700 text-xs px-2 py-0.5 rounded-md border border-slate-200">${s.kamar}</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+            document.getElementById('dash-total-santri').innerText = RAW_SANTRI_LIST.length;
+        }
+
+        // Filter Santri Table
+        function filterSantriTable() {
+            const query = document.getElementById('search-santri').value.toLowerCase();
+            const kelas = document.getElementById('filter-kelas').value;
+            const asrama = document.getElementById('filter-asrama').value;
+
+            const rows = document.getElementById('table-santri-body').querySelectorAll('tr');
+            RAW_SANTRI_LIST.forEach((s, idx) => {
+                const matchQuery = s.nama.toLowerCase().includes(query) || s.nis.includes(query);
+                const matchKelas = !kelas || s.kelas === kelas;
+                const matchAsrama = !asrama || s.asrama === asrama;
+
+                if (matchQuery && matchKelas && matchAsrama) {
+                    rows[idx].style.display = '';
+                } else {
+                    rows[idx].style.display = 'none';
+                }
+            });
+        }
+
+        // Setup Autocomplete for forms
+        function initAutocomplete() {
+            setupSingleAutocomplete('input-pelanggaran-santri', 'autocomplete-list', (s) => {
+                document.getElementById('input-pelanggaran-santri').value = s.nama;
+                document.getElementById('input-pelanggaran-nis').value = s.nis;
+                document.getElementById('input-pelanggaran-kelas').value = s.kelas;
+            });
+
+            setupSingleAutocomplete('input-ibadah-santri', 'autocomplete-list-ibadah', (s) => {
+                document.getElementById('input-ibadah-santri').value = s.nama;
+                document.getElementById('input-ibadah-nis').value = s.nis;
+                document.getElementById('input-ibadah-kelas').value = s.kelas;
+            });
+
+            setupSingleAutocomplete('input-piket-santri', 'autocomplete-list-piket', (s) => {
+                document.getElementById('input-piket-santri').value = s.nama;
+            });
+        }
+
+        function setupSingleAutocomplete(inputId, listId, onSelect) {
+            const input = document.getElementById(inputId);
+            const list = document.getElementById(listId);
+
+            input.addEventListener('input', function() {
+                const val = this.value.toLowerCase().trim();
+                list.innerHTML = '';
+                if (!val) {
+                    list.classList.add('hidden');
+                    return;
+                }
+
+                const matches = RAW_SANTRI_LIST.filter(s => 
+                    s.nama.toLowerCase().includes(val) || s.nis.includes(val)
+                ).slice(0, 7);
+
+                if (matches.length === 0) {
+                    list.classList.add('hidden');
+                    return;
+                }
+
+                matches.forEach(s => {
+                    const item = document.createElement('div');
+                    item.innerHTML = `<strong>${s.nama}</strong> <span class="text-xs text-slate-400">(${s.nis} - ${s.kelas})</span>`;
+                    item.onclick = function() {
+                        onSelect(s);
+                        list.classList.add('hidden');
+                    };
+                    list.appendChild(item);
+                });
+                list.classList.remove('hidden');
+            });
+
+            document.addEventListener('click', function(e) {
+                if (e.target !== input && e.target !== list) {
+                    list.classList.add('hidden');
+                }
+            });
+        }
+
+        // Peraturan Modal & Dropdown
+        function updatePeraturanDropdown() {
+            const kat = document.getElementById('input-pelanggaran-kategori').value;
+            const select = document.getElementById('input-pelanggaran-peraturan');
+            select.innerHTML = '<option value="">-- Pilih Peraturan --</option>';
+
+            const filtered = masterPeraturan.filter(p => p.kategori === kat);
+            filtered.forEach(p => {
+                const opt = document.createElement('option');
+                opt.value = p.nama;
+                opt.innerText = p.nama;
+                select.appendChild(opt);
+            });
+        }
+
+        function togglePeraturanModal() {
+            const m = document.getElementById('modal-peraturan');
+            m.classList.toggle('hidden');
+        }
+
+        function saveCustomPeraturan(e) {
+            e.preventDefault();
+            const kat = document.getElementById('modal-peraturan-kategori').value;
+            const nama = document.getElementById('modal-peraturan-nama').value;
+            const ket = document.getElementById('modal-peraturan-keterangan').value;
+
+            masterPeraturan.push({
+                id: Date.now(),
+                kategori: kat,
+                nama: nama,
+                keterangan: ket
+            });
+
+            alert('Peraturan baru berhasil ditambahkan!');
+            document.getElementById('form-custom-peraturan').reset();
+            togglePeraturanModal();
+            updatePeraturanDropdown();
+        }
+
+        // Save General Violation
+        function savePelanggaran(e) {
+            e.preventDefault();
+            const nama = document.getElementById('input-pelanggaran-santri').value;
+            const nis = document.getElementById('input-pelanggaran-nis').value;
+            const kelas = document.getElementById('input-pelanggaran-kelas').value;
+            const kat = document.getElementById('input-pelanggaran-kategori').value;
+            const per = document.getElementById('input-pelanggaran-peraturan').value;
+            const tgl = document.getElementById('input-pelanggaran-tanggal').value;
+            const ket = document.getElementById('input-pelanggaran-keterangan').value;
+
+            if (!nama || !nis) {
+                alert('Pilih santri terlebih dahulu dari daftar autocomplete!');
+                return;
+            }
+
+            const item = {
+                id: Date.now(),
+                nama, nis, kelas, kategori: kat, peraturan: per, tanggal: tgl, keterangan: ket
+            };
+
+            statePelanggaran.unshift(item);
+            localStorage.setItem('tp_pelanggaran', JSON.stringify(statePelanggaran));
+            
+            document.getElementById('form-pelanggaran').reset();
+            initDefaultDates();
+            renderPelanggaranTable();
+            updateDashboardMetrics();
+            updateCharts();
+            alert('Data pelanggaran berhasil disimpan!');
+        }
+
+        // Render Pelanggaran Table
+        function renderPelanggaranTable() {
+            const tbody = document.getElementById('table-pelanggaran-body');
+            tbody.innerHTML = '';
+
+            const filterPeriode = document.getElementById('rekap-periode').value;
+            const filteredData = filterByPeriode(statePelanggaran, filterPeriode, 'tanggal');
+
+            if (filteredData.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-6 text-slate-400 italic">Belum ada data pelanggaran tercatat.</td></tr>`;
+                return;
+            }
+
+            filteredData.forEach(p => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 border-b border-slate-100";
+
+                let katBadge = "bg-blue-100 text-blue-800";
+                if (p.kategori === "Sedang") katBadge = "bg-amber-100 text-amber-800";
+                if (p.kategori === "Berat") katBadge = "bg-orange-100 text-orange-800";
+                if (p.kategori === "Sangat Berat") katBadge = "bg-red-100 text-red-800";
+
+                const dateFormatted = new Date(p.tanggal).toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'short' });
+
+                tr.innerHTML = `
+                    <td class="py-2.5 px-3 font-mono">${dateFormatted}</td>
+                    <td class="py-2.5 px-3 font-semibold text-slate-800">${p.nama} <br><span class="text-[10px] text-slate-400 font-mono">${p.nis}</span></td>
+                    <td class="py-2.5 px-3 font-medium">${p.kelas}</td>
+                    <td class="py-2.5 px-3"><span class="px-2 py-0.5 text-[10px] rounded font-bold ${katBadge}">${p.kategori}</span></td>
+                    <td class="py-2.5 px-3 font-medium">${p.peraturan}</td>
+                    <td class="py-2.5 px-3 text-slate-500">${p.keterangan || '-'}</td>
+                    <td class="py-2.5 px-3 no-print">
+                        <button onclick="deletePelanggaran(${p.id})" class="text-rose-500 hover:text-rose-700"><i class="fa-solid fa-trash-can"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function deletePelanggaran(id) {
+            if (confirm('Hapus record pelanggaran ini?')) {
+                statePelanggaran = statePelanggaran.filter(p => p.id !== id);
+                localStorage.setItem('tp_pelanggaran', JSON.stringify(statePelanggaran));
+                renderPelanggaranTable();
+                updateDashboardMetrics();
+                updateCharts();
+            }
+        }
+
+        // Save Pelanggaran Ibadah
+        function savePelanggaranIbadah(e) {
+            e.preventDefault();
+            const nama = document.getElementById('input-ibadah-santri').value;
+            const nis = document.getElementById('input-ibadah-nis').value;
+            const kelas = document.getElementById('input-ibadah-kelas').value;
+            const sholat = document.getElementById('input-ibadah-sholat').value;
+            const kode = document.getElementById('input-ibadah-kode').value;
+            const tgl = document.getElementById('input-ibadah-tanggal').value;
+            const cat = document.getElementById('input-ibadah-catatan').value;
+
+            if (!nama || !nis) {
+                alert('Pilih santri terlebih dahulu dari autocomplete!');
+                return;
+            }
+
+            const ketMap = {
+                'A': 'Terlambat masuk masjid',
+                'O': 'Tidak memakai atribut ibadah (peci dan sarung)',
+                'N': 'Ngobrol ketika baina adzan dan iqomah',
+                'X': 'Tidak sholat di masjid berjamaah'
+            };
+
+            const item = {
+                id: Date.now(),
+                nama, nis, kelas, sholat, kode, ket: ketMap[kode], tanggal: tgl, catatan: cat
+            };
+
+            stateIbadah.unshift(item);
+            localStorage.setItem('tp_ibadah', JSON.stringify(stateIbadah));
+
+            document.getElementById('form-ibadah').reset();
+            initDefaultDates();
+            renderIbadahTable();
+            updateCharts();
+            alert('Data pelanggaran ibadah berhasil dicatat!');
+        }
+
+        function renderIbadahTable() {
+            const tbody = document.getElementById('table-ibadah-body');
+            tbody.innerHTML = '';
+
+            const periode = document.getElementById('rekap-ibadah-periode').value;
+            const filteredData = filterByPeriode(stateIbadah, periode, 'tanggal');
+
+            if (filteredData.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-6 text-slate-400 italic">Belum ada pelanggaran ibadah tercatat.</td></tr>`;
+                return;
+            }
+
+            filteredData.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 border-b border-slate-100";
+
+                tr.innerHTML = `
+                    <td class="py-2.5 px-3 font-mono">${item.tanggal}</td>
+                    <td class="py-2.5 px-3 font-semibold text-slate-800">${item.nama} <br><span class="text-[10px] text-slate-400 font-mono">${item.nis}</span></td>
+                    <td class="py-2.5 px-3 font-medium">${item.kelas}</td>
+                    <td class="py-2.5 px-3"><span class="bg-indigo-100 text-indigo-800 text-[10px] font-bold px-2 py-0.5 rounded">${item.sholat}</span></td>
+                    <td class="py-2.5 px-3"><span class="bg-rose-100 text-rose-800 font-extrabold px-2 py-0.5 rounded">${item.kode}</span></td>
+                    <td class="py-2.5 px-3 text-slate-600">${item.ket} ${item.catatan ? ' (' + item.catatan + ')' : ''}</td>
+                    <td class="py-2.5 px-3 no-print">
+                        <button onclick="deleteIbadah(${item.id})" class="text-rose-500 hover:text-rose-700"><i class="fa-solid fa-trash-can"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function deleteIbadah(id) {
+            if (confirm('Hapus record ibadah ini?')) {
+                stateIbadah = stateIbadah.filter(i => i.id !== id);
+                localStorage.setItem('tp_ibadah', JSON.stringify(stateIbadah));
+                renderIbadahTable();
+                updateCharts();
+            }
+        }
+
+        // Jaga Malam Logic
+        function saveJagaMalam(e) {
+            e.preventDefault();
+            const tgl = document.getElementById('input-jaga-tanggal').value;
+            const ustadz = document.getElementById('input-jaga-ustadz').value;
+            const shift = document.getElementById('input-jaga-shift').value;
+            const status = document.getElementById('input-jaga-status').value;
+            const cat = document.getElementById('input-jaga-catatan').value;
+
+            const item = { id: Date.now(), tanggal: tgl, ustadz, shift, status, catatan: cat };
+            stateJagaMalam.unshift(item);
+            localStorage.setItem('tp_jagamalam', JSON.stringify(stateJagaMalam));
+
+            document.getElementById('form-jagamalam').reset();
+            initDefaultDates();
+            renderJagaMalamTable();
+            alert('Laporan jaga malam berhasil disimpan!');
+        }
+
+        function renderJagaMalamTable() {
+            const tbody = document.getElementById('table-jaga-body');
+            tbody.innerHTML = '';
+
+            if (stateJagaMalam.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-slate-400 italic">Belum ada laporan jaga malam.</td></tr>`;
+                return;
+            }
+
+            stateJagaMalam.forEach(j => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 border-b border-slate-100";
+
+                let stBadge = "bg-emerald-100 text-emerald-800";
+                if (j.status !== "Aman & Kondusif") stBadge = "bg-amber-100 text-amber-800";
+
+                tr.innerHTML = `
+                    <td class="py-2.5 px-3 font-mono">${j.tanggal}</td>
+                    <td class="py-2.5 px-3 font-bold text-slate-800">${j.ustadz}</td>
+                    <td class="py-2.5 px-3">${j.shift}</td>
+                    <td class="py-2.5 px-3"><span class="px-2 py-0.5 text-[10px] rounded font-bold ${stBadge}">${j.status}</span></td>
+                    <td class="py-2.5 px-3 text-slate-600">${j.catatan || '-'}</td>
+                    <td class="py-2.5 px-3">
+                        <button onclick="deleteJagaMalam(${j.id})" class="text-rose-500 hover:text-rose-700"><i class="fa-solid fa-trash-can"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function deleteJagaMalam(id) {
+            if (confirm('Hapus laporan ini?')) {
+                stateJagaMalam = stateJagaMalam.filter(j => j.id !== id);
+                localStorage.setItem('tp_jagamalam', JSON.stringify(stateJagaMalam));
+                renderJagaMalamTable();
+            }
+        }
+
+        // Agenda & Pengingat Logic
+        function toggleLainLainField() {
+            const val = document.getElementById('input-agenda-judul').value;
+            const wrap = document.getElementById('wrapper-agenda-lain');
+            if (val === 'Lain-lain') {
+                wrap.classList.remove('hidden');
+            } else {
+                wrap.classList.add('hidden');
+            }
+        }
+
+        function requestNotificationPermission() {
+            if (!("Notification" in window)) {
+                alert("Browser Anda tidak mendukung notifikasi sistem.");
+                return;
+            }
+
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    alert("Notifikasi pengingat agenda BERHASIL diaktifkan!");
+                    document.getElementById('btn-notif-perm').innerHTML = '<i class="fa-solid fa-bell-circle-check"></i> Notifikasi Aktif';
+                    document.getElementById('btn-notif-perm').classList.replace('bg-brand-600', 'bg-emerald-600');
+                } else {
+                    alert("Izin notifikasi ditolak oleh pengguna.");
+                }
+            });
+        }
+
+        function saveAgenda(e) {
+            e.preventDefault();
+            let judul = document.getElementById('input-agenda-judul').value;
+            if (judul === 'Lain-lain') {
+                const detailLain = document.getElementById('input-agenda-lain').value;
+                judul = detailLain ? `Lain-lain: ${detailLain}` : 'Lain-lain';
+            }
+
+            const tgl = document.getElementById('input-agenda-tanggal').value;
+            const waktu = document.getElementById('input-agenda-waktu').value;
+            const ket = document.getElementById('input-agenda-keterangan').value;
+
+            const item = { id: Date.now(), judul, tanggal: tgl, waktu, keterangan: ket, notified: false };
+            stateAgenda.unshift(item);
+            localStorage.setItem('tp_agenda', JSON.stringify(stateAgenda));
+
+            document.getElementById('form-agenda').reset();
+            initDefaultDates();
+            toggleLainLainField();
+            renderAgendaList();
+            updateDashboardMetrics();
+            alert('Agenda penting berhasil dijadwalkan!');
+        }
+
+        function renderAgendaList() {
+            const container = document.getElementById('agenda-list-container');
+            container.innerHTML = '';
+
+            if (stateAgenda.length === 0) {
+                container.innerHTML = `<div class="p-6 text-center text-slate-400 bg-slate-50 rounded-xl border border-dashed border-slate-200">Belum ada agenda penting terjadwal.</div>`;
+                return;
+            }
+
+            stateAgenda.forEach(a => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-start justify-between gap-4 hover:border-brand-300 transition";
+                
+                card.innerHTML = `
+                    <div class="space-y-1">
+                        <span class="bg-brand-100 text-brand-800 text-[10px] font-bold px-2 py-0.5 rounded">${a.tanggal} - ${a.waktu} WIB</span>
+                        <h4 class="font-bold text-slate-800 text-sm mt-1">${a.judul}</h4>
+                        <p class="text-xs text-slate-500">${a.keterangan || 'Tidak ada detail tambahan.'}</p>
+                    </div>
+                    <button onclick="deleteAgenda(${a.id})" class="text-slate-400 hover:text-rose-600 transition"><i class="fa-solid fa-trash-can"></i></button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function deleteAgenda(id) {
+            if (confirm('Hapus agenda ini?')) {
+                stateAgenda = stateAgenda.filter(a => a.id !== id);
+                localStorage.setItem('tp_agenda', JSON.stringify(stateAgenda));
+                renderAgendaList();
+                updateDashboardMetrics();
+            }
+        }
+
+        function checkUpcomingAgendaNotifications() {
+            if (!("Notification" in window) || Notification.permission !== "granted") return;
+
+            const now = new Date();
+            const currentDateStr = now.toISOString().split('T')[0];
+            const currentHoursStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+
+            stateAgenda.forEach(a => {
+                if (!a.notified && a.tanggal === currentDateStr && a.waktu === currentHoursStr) {
+                    new Notification("PENGINGAT AGENDA PONPES TARUNA ALQURAN", {
+                        body: `${a.judul} - ${a.keterangan}`,
+                        icon: 'https://cdn-icons-png.flaticon.com/512/2693/2693507.png'
+                    });
+                    a.notified = true;
+                }
+            });
+            localStorage.setItem('tp_agenda', JSON.stringify(stateAgenda));
+        }
+
+        // Penilaian Kamar Logic
+        function updateKamarDropdown() {
+            const asrama = document.getElementById('input-kamar-asrama').value;
+            const select = document.getElementById('input-kamar-nama');
+            select.innerHTML = '<option value="">-- Pilih Kamar --</option>';
+
+            const kamarAsia = ["Saudi", "Yaman", "Oman", "Yordania", "Irak", "UEA", "Kuwait"];
+            const kamarAfrika = ["Mesir", "Mauritania", "Aljazair", "Maroko", "Libya", "Sudan"];
+
+            const list = asrama === "Asia" ? kamarAsia : (asrama === "Afrika" ? kamarAfrika : []);
+            list.forEach(k => {
+                const opt = document.createElement('option');
+                opt.value = k;
+                opt.innerText = k;
+                select.appendChild(opt);
+            });
+        }
+
+        function savePenilaianKamar(e) {
+            e.preventDefault();
+            const asrama = document.getElementById('input-kamar-asrama').value;
+            const nama = document.getElementById('input-kamar-nama').value;
+            const tgl = document.getElementById('input-kamar-tanggal').value;
+
+            const c1 = document.getElementById('kamar-c1').checked;
+            const c2 = document.getElementById('kamar-c2').checked;
+            const c3 = document.getElementById('kamar-c3').checked;
+            const c4 = document.getElementById('kamar-c4').checked;
+            const c5 = document.getElementById('kamar-c5').checked;
+
+            const passCount = [c1, c2, c3, c4, c5].filter(Boolean).length;
+            const score = passCount * 20; // 5 items * 20 = 100 max score
+
+            const item = {
+                id: Date.now(), asrama, nama, tanggal: tgl,
+                c1, c2, c3, c4, c5, score
+            };
+
+            stateKamar.unshift(item);
+            localStorage.setItem('tp_kamar', JSON.stringify(stateKamar));
+
+            document.getElementById('form-kamar').reset();
+            initDefaultDates();
+            renderPenilaianKamarTable();
+            updateDashboardMetrics();
+            alert('Penilaian kamar berhasil disimpan!');
+        }
+
+        function renderPenilaianKamarTable() {
+            const tbody = document.getElementById('table-kamar-body');
+            tbody.innerHTML = '';
+
+            if (stateKamar.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-slate-400 italic">Belum ada penilaian kamar.</td></tr>`;
+                document.getElementById('kamar-terbaik-name').innerText = "-";
+                document.getElementById('kamar-terbaik-score').innerText = "Skor: - / 100";
+                document.getElementById('kamar-terburuk-name').innerText = "-";
+                document.getElementById('kamar-terburuk-score').innerText = "Skor: - / 100";
+                return;
+            }
+
+            // Determine Best & Worst Kamar
+            const sorted = [...stateKamar].sort((a, b) => b.score - a.score);
+            const best = sorted[0];
+            const worst = sorted[sorted.length - 1];
+
+            document.getElementById('kamar-terbaik-name').innerText = `${best.nama} (${best.asrama})`;
+            document.getElementById('kamar-terbaik-score').innerText = `Skor: ${best.score} / 100`;
+
+            document.getElementById('kamar-terburuk-name').innerText = `${worst.nama} (${worst.asrama})`;
+            document.getElementById('kamar-terburuk-score').innerText = `Skor: ${worst.score} / 100`;
+
+            stateKamar.forEach(k => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 border-b border-slate-100";
+
+                let scoreColor = "text-emerald-600";
+                if (k.score < 60) scoreColor = "text-rose-600";
+                else if (k.score < 80) scoreColor = "text-amber-600";
+
+                tr.innerHTML = `
+                    <td class="py-2.5 px-3 font-mono">${k.tanggal}</td>
+                    <td class="py-2.5 px-3 font-medium text-slate-600">Asrama ${k.asrama}</td>
+                    <td class="py-2.5 px-3 font-bold text-slate-800">${k.nama}</td>
+                    <td class="py-2.5 px-3 text-[11px] text-slate-500">${k.score/20} / 5 Kriteria Terpenuhi</td>
+                    <td class="py-2.5 px-3 font-black ${scoreColor}">${k.score} / 100</td>
+                    <td class="py-2.5 px-3">
+                        <button onclick="deletePenilaianKamar(${k.id})" class="text-rose-500 hover:text-rose-700" title="Hapus Penilaian"><i class="fa-solid fa-trash-can"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Feature: Delete room evaluation
+        function deletePenilaianKamar(id) {
+            if (confirm('Hapus record penilaian kamar ini?')) {
+                stateKamar = stateKamar.filter(k => k.id !== id);
+                localStorage.setItem('tp_kamar', JSON.stringify(stateKamar));
+                renderPenilaianKamarTable();
+                updateDashboardMetrics();
+            }
+        }
+
+        // Kebersihan & Piket Logic
+        function switchPiketZone(zone) {
+            currentPiketZone = zone;
+            document.querySelectorAll('.piket-zone-btn').forEach(btn => {
+                btn.classList.remove('text-brand-600', 'border-brand-600', 'font-bold');
+                btn.classList.add('text-slate-500', 'border-transparent');
+            });
+
+            const activeTab = document.getElementById('piket-tab-' + zone);
+            activeTab.classList.add('text-brand-600', 'border-brand-600', 'font-bold');
+            activeTab.classList.remove('text-slate-500', 'border-transparent');
+
+            renderPiketChecklist();
+        }
+
+        function renderPiketChecklist() {
+            const date = document.getElementById('piket-date-select').value;
+            const shift = document.getElementById('piket-shift-select').value;
+            const grid = document.getElementById('piket-checklist-grid');
+            grid.innerHTML = '';
+
+            let list = PIKET_HALAMAN;
+            if (currentPiketZone === 'asrama') list = PIKET_ASRAMA;
+            if (currentPiketZone === 'bawah') list = PIKET_BAWAH;
+
+            const keyPrefix = `${date}_${shift}_${currentPiketZone}_`;
+
+            list.forEach(loc => {
+                const key = keyPrefix + loc;
+                const isChecked = !!statePiketChecklist[key];
+
+                const card = document.createElement('div');
+                card.className = `p-3 rounded-xl border text-xs flex items-center justify-between cursor-pointer transition ${isChecked ? 'bg-emerald-50 border-emerald-300 text-emerald-900 font-semibold' : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300'}`;
+                
+                card.innerHTML = `
+                    <span>${loc}</span>
+                    <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="togglePiketCheck('${key}', this.checked)" class="w-4 h-4 text-emerald-600 rounded focus:ring-emerald-500">
+                `;
+                grid.appendChild(card);
+            });
+
+            renderUncompletedPiketRecap();
+        }
+
+        function togglePiketCheck(key, checked) {
+            statePiketChecklist[key] = checked;
+            localStorage.setItem('tp_piket_check', JSON.stringify(statePiketChecklist));
+            renderPiketChecklist();
+        }
+
+        function renderUncompletedPiketRecap() {
+            const date = document.getElementById('piket-date-select').value;
+            const shift = document.getElementById('piket-shift-select').value;
+            const container = document.getElementById('uncompleted-piket-list');
+            container.innerHTML = '';
+
+            let allLocs = [
+                ...PIKET_HALAMAN.map(l => ({ zone: 'halaman', loc: l })),
+                ...PIKET_ASRAMA.map(l => ({ zone: 'asrama', loc: l })),
+                ...PIKET_BAWAH.map(l => ({ zone: 'bawah', loc: l }))
+            ];
+
+            const uncompleted = allLocs.filter(item => {
+                const key = `${date}_${shift}_${item.zone}_${item.loc}`;
+                return !statePiketChecklist[key];
+            });
+
+            if (uncompleted.length === 0) {
+                container.innerHTML = `<div class="p-3 text-xs text-emerald-700 font-bold bg-emerald-100/70 rounded-lg"><i class="fa-solid fa-circle-check"></i> MasyaAllah! Semua tempat piket tuntas 100%.</div>`;
+                return;
+            }
+
+            uncompleted.forEach(item => {
+                const div = document.createElement('div');
+                div.className = "text-xs px-2.5 py-1.5 bg-white rounded-lg border border-amber-200 text-amber-900 flex justify-between items-center";
+                div.innerHTML = `
+                    <span class="font-medium">${item.loc}</span>
+                    <span class="text-[10px] uppercase bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded font-bold">${item.zone}</span>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function saveSantriTidakPiket(e) {
+            e.preventDefault();
+            const nama = document.getElementById('input-piket-santri').value;
+            const lokasi = document.getElementById('input-piket-lokasi').value;
+            const alasan = document.getElementById('input-piket-alasan').value;
+            const date = document.getElementById('piket-date-select').value;
+            const shift = document.getElementById('piket-shift-select').value;
+
+            if (!nama) return;
+
+            const item = { id: Date.now(), nama, lokasi, alasan, date, shift };
+            stateSantriTidakPiket.unshift(item);
+            localStorage.setItem('tp_piket_absent', JSON.stringify(stateSantriTidakPiket));
+
+            document.getElementById('form-tidak-piket').reset();
+            renderSantriTidakPiketTable();
+            alert('Data santri tidak piket disimpan!');
+        }
+
+        function renderSantriTidakPiketTable() {
+            const tbody = document.getElementById('table-tidak-piket-body');
+            tbody.innerHTML = '';
+
+            const date = document.getElementById('piket-date-select').value;
+            const filtered = stateSantriTidakPiket.filter(x => x.date === date);
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-slate-400 italic">Tidak ada santri alfa piket hari ini.</td></tr>`;
+                return;
+            }
+
+            filtered.forEach(x => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="p-2 font-bold text-slate-800">${x.nama}</td>
+                    <td class="p-2 text-slate-600">${x.lokasi}</td>
+                    <td class="p-2 font-semibold text-brand-700">${x.shift}</td>
+                    <td class="p-2">
+                        <button onclick="deleteSantriTidakPiket(${x.id})" class="text-rose-500 hover:text-rose-700"><i class="fa-solid fa-trash-can"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function deleteSantriTidakPiket(id) {
+            stateSantriTidakPiket = stateSantriTidakPiket.filter(x => x.id !== id);
+            localStorage.setItem('tp_piket_absent', JSON.stringify(stateSantriTidakPiket));
+            renderSantriTidakPiketTable();
+        }
+
+        // Dashboard Metrics Update
+        function updateDashboardMetrics() {
+            const todayStr = new Date().toISOString().split('T')[0];
+            const countTodayPelanggaran = statePelanggaran.filter(p => p.tanggal.startsWith(todayStr)).length;
+            document.getElementById('dash-total-pelanggaran').innerText = countTodayPelanggaran;
+            document.getElementById('dash-total-agenda').innerText = stateAgenda.length;
+
+            if (stateKamar.length > 0) {
+                const sorted = [...stateKamar].sort((a,b) => b.score - a.score);
+                document.getElementById('dash-kamar-terbaik').innerText = `${sorted[0].nama} (${sorted[0].score})`;
+            } else {
+                document.getElementById('dash-kamar-terbaik').innerText = "-";
+            }
+        }
+
+        // Charts Initialization
+        function initCharts() {
+            const ctx1 = document.getElementById('chartPelanggaran').getContext('2d');
+            chartPelanggaranInstance = new Chart(ctx1, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Ringan', 'Sedang', 'Berat', 'Sangat Berat'],
+                    datasets: [{
+                        data: [0, 0, 0, 0],
+                        backgroundColor: ['#3b82f6', '#f59e0b', '#f97316', '#ef4444']
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            const ctx2 = document.getElementById('chartIbadah').getContext('2d');
+            chartIbadahInstance = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: ['Shubuh', 'Dzuhur', 'Ashar', 'Maghrib', 'Isya'],
+                    datasets: [{
+                        label: 'Pelanggaran Ibadah',
+                        data: [0, 0, 0, 0, 0],
+                        backgroundColor: '#1d4ed8'
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            updateCharts();
+        }
+
+        function updateCharts() {
+            if (!chartPelanggaranInstance || !chartIbadahInstance) return;
+
+            const countsKat = { 'Ringan': 0, 'Sedang': 0, 'Berat': 0, 'Sangat Berat': 0 };
+            statePelanggaran.forEach(p => {
+                if (countsKat[p.kategori] !== undefined) countsKat[p.kategori]++;
+            });
+            chartPelanggaranInstance.data.datasets[0].data = Object.values(countsKat);
+            chartPelanggaranInstance.update();
+
+            const countsSholat = { 'Shubuh': 0, 'Dzuhur': 0, 'Ashar': 0, 'Maghrib': 0, 'Isya': 0 };
+            stateIbadah.forEach(i => {
+                if (countsSholat[i.sholat] !== undefined) countsSholat[i.sholat]++;
+            });
+            chartIbadahInstance.data.datasets[0].data = Object.values(countsSholat);
+            chartIbadahInstance.update();
+        }
+
+        // Utility: Filter Data by Period
+        function filterByPeriode(dataArray, periode, dateField) {
+            if (periode === 'semua') return dataArray;
+            const now = new Date();
+
+            return dataArray.filter(item => {
+                const itemDate = new Date(item[dateField]);
+                if (periode === 'harian') {
+                    return itemDate.toDateString() === now.toDateString();
+                } else if (periode === 'mingguan') {
+                    const diffDays = (now - itemDate) / (1000 * 60 * 60 * 24);
+                    return diffDays >= 0 && diffDays <= 7;
+                } else if (periode === 'bulanan') {
+                    return itemDate.getMonth() === now.getMonth() && itemDate.getFullYear() === now.getFullYear();
+                } else if (periode === 'semester') {
+                    const diffMonths = (now.getFullYear() - itemDate.getFullYear()) * 12 + (now.getMonth() - itemDate.getMonth());
+                    return diffMonths < 6;
+                }
+                return true;
+            });
+        }
+
+        // PDF Exporters using html2pdf.js
+        function exportPelanggaranPDF() {
+            const element = document.getElementById('pdf-area-pelanggaran');
+            const opt = {
+                margin:       10,
+                filename:     'Rekap_Pelanggaran_Santri_Ponpes_Taruna_Alquran.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
+            };
+
+            html2pdf().set(opt).from(element).save();
+        }
+
+        function exportIbadahPDF() {
+            const element = document.getElementById('pdf-area-ibadah');
+            const opt = {
+                margin:       10,
+                filename:     'Rekap_Pelanggaran_Ibadah_Ponpes_Taruna_Alquran.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
+            };
+
+            html2pdf().set(opt).from(element).save();
+        }
+    </script>
+</body>
+</html>
